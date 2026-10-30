@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <!-- Barra superior personalizada -->
+        <div class="top-row px-4 d-flex justify-content-between align-items-center bg-light border-bottom">
+            <!-- Nombre o marca del negocio -->
+            <span class="navbar-brand font-weight-bold text-dark">
+                Muebles Elohim
+            </span>
+
+            <!-- Enlaces de navegación rápida -->
+            <nav class="d-flex gap-3 align-items-center">
+                <NavLink class="text-decoration-none text-secondary px-2" href="productos" Match="NavLinkMatch.All">
+                    Productos
+                </NavLink>
+                <NavLink class="text-decoration-none text-secondary px-2" href="privacidad">
+                    Privacidad
+                </NavLink>
+                <NavLink class="btn btn-primary px-3 text-white" href="contacto">
+                    Contáctanos
+                </NavLink>
+            </nav>
+        </div>
+
+        <article class="content px-4 py-3">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui">
+    Ha ocurrido un error inesperado.
+    <a href="" class="reload">Recargar</a>
+    <a class="dismiss">🗙</a>
+</div>
