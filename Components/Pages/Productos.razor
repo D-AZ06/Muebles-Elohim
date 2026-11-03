@@ -1,0 +1,61 @@
+﻿@page "/productos"
+
+<PageTitle>Productos - Muebles Elohim</PageTitle>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container my-4">
+
+    <!-- 1. NUEVO: Botón exclusivo para móviles (Solo se ve en pantallas pequeñas) -->
+    <div class="d-lg-none mb-3">
+        <button class="btn btn-outline-primary w-100 d-flex justify-content-between align-items-center"
+                type="button" data-bs-toggle="offcanvas" data-bs-target="#panelFiltros">
+            <span><i class="bi bi-funnel"></i> Filtrar Categorías</span>
+            <i class="bi bi-chevron-down"></i>
+        </button>
+    </div>
+
+    <!-- 2. CAMBIO: Fila que divide la pantalla en Escritorio -->
+    <div class="row">
+
+        <!-- 3. CAMBIO: Barra Lateral (Visible en PC con col-lg-3, Oculta en Celular con d-none) -->
+        <aside class="col-lg-3 d-none d-lg-block">
+            <div class="card border-0 shadow-sm p-3 sticky-top" style="top: 20px;">
+                <h5 class="fw-bold text-primary mb-3">Filtros</h5>
+                <ul class="list-group list-group-flush">
+                    <li><button class="btn btn-light text-start w-100 mb-1">Centro de entretenimiento</button></li>
+                    <li><button class="btn btn-light text-start w-100 mb-1">Muebles para TV</button></li>
+                    <li><button class="btn btn-light text-start w-100 mb-1">Mostrador</button></li>
+                    <li><button class="btn btn-light text-start w-100 mb-1">Closets</button></li>
+                    <li><button class="btn btn-light text-start w-100 mb-1">Cocina</button></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- 4. CAMBIO: Catálogo con clase col-lg-9 para ocupar el resto del ancho -->
+        <main class="col-lg-9">
+            <h2 class="fw-bold text-dark mb-4">Nuestros Productos</h2>
+            <div class="row g-4">
+                <!-- Aquí irán tus tarjetas de productos más adelante -->
+            </div>
+        </main>
+
+    </div>
+</div>
+
+<!-- 5. NUEVO: Panel Desplegable (Offcanvas) para Celulares (Vive oculto hasta que tocan el botón) -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="panelFiltros">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title fw-bold text-primary">Filtros</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-group list-group-flush">
+            <li><button class="btn btn-light text-start w-100 mb-1" data-bs-dismiss="offcanvas">Centro de entretenimiento</button></li>
+            <li><button class="btn btn-light text-start w-100 mb-1" data-bs-dismiss="offcanvas">Muebles para TV</button></li>
+            <li><button class="btn btn-light text-start w-100 mb-1" data-bs-dismiss="offcanvas">Mostrador</button></li>
+            <li><button class="btn btn-light text-start w-100 mb-1" data-bs-dismiss="offcanvas">Closets</button></li>
+            <li><button class="btn btn-light text-start w-100 mb-1" data-bs-dismiss="offcanvas">Cocina</button></li>
+        </ul>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 ﻿.home-container {
-    padding-bottom: 6rem;
+    padding-bottom: 20px;
 }
 
 /* Estilos del carrusel */
@@ -172,45 +172,58 @@
     }
 
 /* --- ESTILOS DEL BOTÓN FLOTANTE (Suave y Fluido) --- */
-.floating-btn-container {
-    position: fixed;
+
+.floating-wrapper {
+    position: sticky;
     bottom: 25px;
-    right: 25px;
-    left: auto;
-    transform: none;
+    height: 0;
     z-index: 1050;
-    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), left 0.7s cubic-bezier(0.25, 1, 0.5, 1), right 0.7s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
+#floatingSentinel {
+    height: 1px;
+}
+
+/* ===== CONTENEDOR ===== */
+.floating-btn-container {
+    position: absolute;
+    bottom: 0;
+    left: 100%;
+    width: max-content; /* evita que el contenedor encoja el botón */
+    transform: translateX(calc(-100% + 1.5rem - 25px));
+    transition: left 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+    /* ===== ESTADO ESQUINA: círculo, solo icono ===== */
     .floating-btn-container .btn {
-        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-        border: none;
-        box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
-        transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1), height 0.7s cubic-bezier(0.25, 1, 0.5, 1), padding 0.7s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, transform 0.4s ease;
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 55px;
+        height: 55px;
         padding: 0;
+        border: none;
+        border-radius: 50px;
         overflow: hidden;
         white-space: nowrap;
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
+        transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1), padding 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, transform 0.4s ease;
     }
-
-        .floating-btn-container .btn .btn-text {
-            opacity: 0;
-            max-width: 0;
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            transition: opacity 0.4s ease, max-width 0.6s ease, margin 0.6s ease;
-            margin-left: 0;
-        }
 
         .floating-btn-container .btn i {
             font-size: 1.4rem;
             margin: 0;
+        }
+
+        .floating-btn-container .btn .btn-text {
+            display: inline-block;
+            max-width: 0;
+            margin-left: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity 0.4s ease, max-width 0.6s ease, margin 0.6s ease;
         }
 
     .floating-btn-container:hover .btn {
@@ -218,30 +231,26 @@
         box-shadow: 0 6px 25px rgba(13, 110, 253, 0.6);
     }
 
+    /* ===== ESTADO CENTRO: cápsula con texto ===== */
     .floating-btn-container.at-bottom {
-        position: fixed;
-        bottom: 30px;
         left: 50%;
-        right: auto;
         transform: translateX(-50%);
     }
 
         .floating-btn-container.at-bottom .btn {
             width: 220px;
-            height: 48px;
-            border-radius: 50px;
             padding: 0 20px;
             box-shadow: 0 10px 30px rgba(13, 110, 253, 0.6);
         }
 
             .floating-btn-container.at-bottom .btn .btn-text {
-                opacity: 1;
                 max-width: 170px;
                 margin-left: 10px;
+                opacity: 1;
                 font-weight: bold;
+                font-size: 0.9rem;
                 letter-spacing: 0.5px;
                 text-transform: uppercase;
-                font-size: 0.9rem;
             }
 
         .floating-btn-container.at-bottom:hover .btn {

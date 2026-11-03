@@ -86,35 +86,6 @@ public partial class Home : ComponentBase, IDisposable
         StateHasChanged();
     }
 
-    protected override async Task OnAfterRenderAsync(
-        bool firstRender)
-    {
-        if (!firstRender)
-            return;
-
-        await JS.InvokeVoidAsync("eval", @"
-            window.addEventListener('scroll', () => {
-
-                const scrollPosition =
-                    window.innerHeight + window.scrollY;
-
-                const threshold =
-                    document.documentElement.scrollHeight - 60;
-
-                const container =
-                    document.querySelector('.floating-btn-container');
-
-                if (!container)
-                    return;
-
-                if (scrollPosition >= threshold)
-                    container.classList.add('at-bottom');
-                else
-                    container.classList.remove('at-bottom');
-            });
-        ");
-    }
-
     public void Dispose()
     {
         cts?.Cancel();
