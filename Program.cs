@@ -1,5 +1,5 @@
+using Supabase;
 using Muebles_Elohim.Components;
-using MongoDB.Driver;
 
 namespace Muebles_Elohim
 {
@@ -13,18 +13,19 @@ namespace Muebles_Elohim
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            // DB
-            var mongoConnectionString = builder.Configuration["MongoDBSettings:ConnectionString"];
-            var mongoDatabaseName = builder.Configuration["MongoDBSettings:DatabaseName"];
+            // ==========================================
+            // Configuración de Supabase
+            // ==========================================
+            var supabaseUrl = builder.Configuration["Supabase:Url"];
+            var supabaseKey = builder.Configuration["Supabase:Key"];
 
-            // Registramos el cliente de MongoDB
-            builder.Services.AddSingleton<IMongoClient>(_ => new MongoClient(mongoConnectionString));
-
-            // Registramos la base de datos para poder inyectarla en cualquier componente .razor
-            builder.Services.AddScoped(sp => {
-                var client = sp.GetRequiredService<IMongoClient>();
-                return client.GetDatabase(mongoDatabaseName);
-            });
+            // Registramos el cliente de Supabase como Singleton para usarlo en toda la app
+            builder.Services.AddSingleton(_ =>
+                new Supabase.Client(supabaseUrl, supabaseKey, new Supabase.SupabaseOptions
+                {
+                    AutoConnectRealtime = false // Desactivado para ahorrar recursos si no usas WebSockets
+                })
+            );
             // ==========================================
 
             var app = builder.Build();
