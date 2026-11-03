@@ -1,0 +1,249 @@
+﻿.home-container {
+    padding-bottom: 6rem;
+}
+
+/* Estilos del carrusel */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    overflow: hidden;
+    background: #000;
+}
+
+.carousel-inner-custom {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.slide-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+    .slide-item.active {
+        opacity: 1;
+        z-index: 2;
+        pointer-events: auto;
+    }
+
+/* 1. Capa de fondo difuminado */
+.slide-bg-blur {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px) brightness(0.6);
+    z-index: 1;
+}
+
+/* 2. Contenedor de la imagen principal completa */
+.slide-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 85px;
+}
+
+    .slide-img-wrapper img {
+        max-width: 100%;
+        max-height: calc(100% - 40px);
+        object-fit: contain;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+/* 3. Título y descripción */
+.slide-caption {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    text-align: center;
+    width: 85%;
+    max-width: 600px;
+    z-index: 5;
+    backdrop-filter: blur(5px);
+}
+
+    .slide-caption h5 {
+        font-size: 0.95rem;
+        margin-bottom: 2px;
+        font-weight: 600;
+    }
+
+    .slide-caption p {
+        font-size: 0.8rem;
+        margin-bottom: 6px;
+        color: #ddd;
+    }
+
+/* Contenedor de Indicadores (Puntos / Cápsulas debajo de la descripción) */
+.dots-indicators-container {
+    padding: 0px;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 20;
+}
+
+/* Estado Normal: Punto pequeño */
+.dot-item {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+    /* Estado Hover: Se expande a cápsula sin llenarse */
+    .dot-item:hover {
+        width: 28px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Estado Activo: Se expande a cápsula y se va llenando con la barra blanca */
+    .dot-item.active {
+        width: 32px;
+        height: 8px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+.dot-progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #ffffff;
+    width: 0%;
+    animation-name: capsuleFill;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes capsuleFill {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+    }
+
+/* --- ESTILOS DEL BOTÓN FLOTANTE (Suave y Fluido) --- */
+.floating-btn-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    left: auto;
+    transform: none;
+    z-index: 1050;
+    transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1), left 0.7s cubic-bezier(0.25, 1, 0.5, 1), right 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+    .floating-btn-container .btn {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        border: none;
+        box-shadow: 0 4px 20px rgba(13, 110, 253, 0.4);
+        transition: width 0.7s cubic-bezier(0.25, 1, 0.5, 1), height 0.7s cubic-bezier(0.25, 1, 0.5, 1), padding 0.7s cubic-bezier(0.25, 1, 0.5, 1), border-radius 0.7s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease, transform 0.4s ease;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+        .floating-btn-container .btn .btn-text {
+            opacity: 0;
+            max-width: 0;
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: opacity 0.4s ease, max-width 0.6s ease, margin 0.6s ease;
+            margin-left: 0;
+        }
+
+        .floating-btn-container .btn i {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+    .floating-btn-container:hover .btn {
+        transform: scale(1.08);
+        box-shadow: 0 6px 25px rgba(13, 110, 253, 0.6);
+    }
+
+    .floating-btn-container.at-bottom {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+    }
+
+        .floating-btn-container.at-bottom .btn {
+            width: 220px;
+            height: 48px;
+            border-radius: 50px;
+            padding: 0 20px;
+            box-shadow: 0 10px 30px rgba(13, 110, 253, 0.6);
+        }
+
+            .floating-btn-container.at-bottom .btn .btn-text {
+                opacity: 1;
+                max-width: 170px;
+                margin-left: 10px;
+                font-weight: bold;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                font-size: 0.9rem;
+            }
+
+        .floating-btn-container.at-bottom:hover .btn {
+            transform: scale(1.03);
+        }

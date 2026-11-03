@@ -7,14 +7,10 @@
 
     <main>
 
-       <header id="mainHeader">
+        <header id="mainHeader">
 
             <div id="logoGrandeContainer">
-                <!--
-                <h2 class="titulo-principal">
-                    Muebles Elohim
-                </h2>
-                -->
+
                 <img class="logo-grande"
                      src="https://dhqcnrgknozpixhplobn.supabase.co/storage/v1/object/public/Catalogo/logo_MC_completo.png"
                      alt="Muebles Elohim" />
@@ -23,7 +19,6 @@
 
         </header>
 
-        <!-- Barra superior personalizada -->
         <div class="top-row">
 
             <div id="logoSticky">
@@ -37,20 +32,22 @@
             </div>
 
             <nav class="d-flex gap-3 align-items-center">
+
                 <NavLink class="text-decoration-none text-secondary px-2"
-                            href="productos">
+                         href="productos">
                     Productos
                 </NavLink>
 
                 <NavLink class="text-decoration-none text-secondary px-2"
-                            href="privacidad">
+                         href="privacidad">
                     Privacidad
                 </NavLink>
 
                 <NavLink class="btn btn-primary px-3 text-white"
-                            href="contacto">
+                         href="contacto">
                     Contáctanos
                 </NavLink>
+
             </nav>
 
         </div>
@@ -58,6 +55,7 @@
         <article class="content px-4 py-3">
             @Body
         </article>
+
     </main>
 </div>
 
@@ -68,137 +66,10 @@
 </div>
 
 
-<style>
-    /* ===== HEADER PRINCIPAL ===== */
-
-    header {
-        height: 280px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: white;
-        overflow: hidden;
-    }
-
-    .logo-grande {
-        width: 260px;
-        max-width: 90%;
-        display: block;
-        margin: auto;
-        transition: all .6s ease;
-    }
-
-    /* ===== BARRA STICKY ===== */
-
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: white;
-        border-bottom: 1px solid #ddd;
-        min-height: 70px;
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
-
-    /* ===== LOGO DEL STICKY ===== */
-
-    #logoSticky {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        opacity: 0;
-        transition: all .6s ease;
-        pointer-events: none;
-        white-space: nowrap;
-    }
-
-    .logo-mini {
-        width: 34px;
-        height: auto;
-    }
-
-    #logoSticky span {
-        font-size: 1rem;
-        font-weight: 600;
-    }
-
-    /* ===== MENU ===== */
-
-    .top-row nav {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-left: auto;
-    }
-
-        .top-row nav a {
-            text-decoration: none;
-            white-space: nowrap;
-        }
-
-    /* ===== ANIMACION ===== */
-
-    #logoGrandeContainer {
-        opacity: 1;
-        transform: scale(1);
-        transition: all .6s ease;
-    }
-
-    body.scrolled #logoGrandeContainer {
-        opacity: .25;
-        transform: scale(.90);
-    }
-
-    body.scrolled #logoSticky {
-        opacity: 1;
-    }
-
-    /* ===== MOVIL ===== */
-
-    @@media (max-width: 768px) {
-
-        header {
-            height: 180px;
-        }
-
-        .logo-grande {
-            width: 180px;
-        }
-
-        .top-row {
-            min-height: 60px;
-            padding: 0 10px;
-        }
-
-            .top-row nav {
-                gap: .5rem;
-            }
-
-                .top-row nav a {
-                    font-size: .85rem;
-                }
-
-        .logo-mini {
-            width: 24px;
-        }
-
-        #logoSticky span {
-            display: none;
-        }
-    }
-</style>
 
 
 <script>
-
-    window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', () => {
 
         const header = document.getElementById('mainHeader');
 
@@ -207,18 +78,16 @@
 
         const rect = header.getBoundingClientRect();
 
-        /* Cuando queda aproximadamente un 25% visible */
-
-        if(rect.bottom <= 70){
+        if (rect.bottom <= 70) {
 
             document.body.classList.add('scrolled');
 
-        }else{
+        } else {
 
             document.body.classList.remove('scrolled');
 
         }
 
     });
-
 </script>
+
