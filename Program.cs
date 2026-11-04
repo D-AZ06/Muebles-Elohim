@@ -5,7 +5,7 @@ namespace Muebles_Elohim
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,10 @@ namespace Muebles_Elohim
             // ==========================================
 
             var app = builder.Build();
+
+            var supabase = app.Services.GetRequiredService<Supabase.Client>();
+            await supabase.InitializeAsync();
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
