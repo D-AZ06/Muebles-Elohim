@@ -5,73 +5,20 @@
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-<div class="container my-4">
+<!-- CLASE CONDICIONAL "bloqueado" para evitar scroll y clics en el fondo -->
+<div class="container my-4 catalogo @(panelAbierto ? "bloqueado" : "")">
 
-    <!-- BOTÓN DE FILTROS PARA MÓVILES -->
-    <div class="d-lg-none mb-3">
-        <button class="btn btn-dark w-100 d-flex justify-content-between align-items-center py-2 px-3 shadow-sm rounded-3"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#panelFiltros"
-                aria-controls="panelFiltros">
-
-            <span class="d-flex align-items-center gap-2">
-                <i class="bi bi-funnel-fill text-warning"></i>
-                <span class="fw-semibold">Filtrar por Categoría</span>
-            </span>
-
-            <i class="bi bi-chevron-right small"></i>
-        </button>
-    </div>
-
-    <!-- PANEL DE FILTROS PARA MÓVILES -->
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="panelFiltros">
-
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title fw-bold">
-                <i class="bi bi-sliders me-2 text-primary"></i>
-                Categorías
-            </h5>
-
-            <button type="button" class="btn-close"
-                    data-bs-dismiss="offcanvas"></button>
-        </div>
-
-        <div class="offcanvas-body">
-
-            <div class="list-group list-group-flush gap-1">
-
-                <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 @(categoriaSeleccionada == "todos" ? "active" : "")"
-                        @onclick='() => SeleccionarCategoria("todos")'
-                        data-bs-dismiss="offcanvas">
-                    <i class="bi bi-grid-fill me-2"></i>Todos
+    <!-- FILTRO PARA MÓVILES: chips con scroll horizontal -->
+    <div class="filtro-movil d-lg-none">
+        <div class="chips">
+            @foreach (var categoria in categorias)
+            {
+                <button type="button"
+                        class="chip @(categoriaSeleccionada == categoria.Clave ? "activo" : "")"
+                        @onclick="() => SeleccionarCategoria(categoria.Clave)">
+                    <i class="bi @categoria.Icono me-1"></i>@categoria.Nombre
                 </button>
-
-                <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 @(categoriaSeleccionada == "entretenimiento" ? "active" : "")"
-                        @onclick='() => SeleccionarCategoria("entretenimiento")'
-                        data-bs-dismiss="offcanvas">
-                    <i class="bi bi-tv me-2"></i>Centro de entretenimiento
-                </button>
-
-                <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 @(categoriaSeleccionada == "cocina" ? "active" : "")"
-                        @onclick='() => SeleccionarCategoria("cocina")'
-                        data-bs-dismiss="offcanvas">
-                    <i class="bi bi-cup-hot me-2"></i>Cocina
-                </button>
-
-                <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 @(categoriaSeleccionada == "bano" ? "active" : "")"
-                        @onclick='() => SeleccionarCategoria("bano")'
-                        data-bs-dismiss="offcanvas">
-                    <i class="bi bi-droplet me-2"></i>Baño
-                </button>
-
-                <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 @(categoriaSeleccionada == "muebles" ? "active" : "")"
-                        @onclick='() => SeleccionarCategoria("muebles")'
-                        data-bs-dismiss="offcanvas">
-                    <i class="bi bi-house-door me-2"></i>Muebles
-                </button>
-
-            </div>
+            }
         </div>
     </div>
 
@@ -80,85 +27,46 @@
 
         <!-- BARRA LATERAL PARA ESCRITORIO -->
         <aside class="col-lg-3 d-none d-lg-block">
-
-            <div class="card border-0 shadow-sm p-4 sticky-top rounded-4 bg-white"
-                 style="top: 20px;">
-
+            <div class="card border-0 shadow-sm p-4 rounded-4 bg-white barra-lateral">
                 <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
-
                     <h5 class="fw-bold text-dark m-0">
                         <i class="bi bi-sliders me-2 text-primary"></i>
                         Filtros
                     </h5>
-
-                    <span class="badge bg-light text-muted border">
-                        Menú
-                    </span>
-
                 </div>
 
                 <div class="list-group list-group-flush gap-1">
-
-                    <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == "todos" ? "active" : "")"
-                            @onclick='() => SeleccionarCategoria("todos")'>
-
-                        <i class="bi bi-grid-fill"></i> Todos
-                    </button>
-
-                    <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == "entretenimiento" ? "active" : "")"
-                            @onclick='() => SeleccionarCategoria("entretenimiento")'>
-
-                        <i class="bi bi-tv"></i> Centro de entretenimiento
-                    </button>
-
-                    <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == "cocina" ? "active" : "")"
-                            @onclick='() => SeleccionarCategoria("cocina")'>
-
-                        <i class="bi bi-cup-hot"></i> Cocina
-                    </button>
-
-                    <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == "bano" ? "active" : "")"
-                            @onclick='() => SeleccionarCategoria("bano")'>
-
-                        <i class="bi bi-droplet"></i> Baño
-                    </button>
-
-                    <button class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == "muebles" ? "active" : "")"
-                            @onclick='() => SeleccionarCategoria("muebles")'>
-
-                        <i class="bi bi-house-door"></i> Muebles
-                    </button>
-
+                    @foreach (var categoria in categorias)
+                    {
+                        <button type="button"
+                                class="list-group-item list-group-item-action border-0 rounded-2 py-2 px-3 d-flex align-items-center gap-2 @(categoriaSeleccionada == categoria.Clave ? "active" : "")"
+                                @onclick="() => SeleccionarCategoria(categoria.Clave)">
+                            <i class="bi @categoria.Icono"></i>
+                            <span class="flex-grow-1">@categoria.Nombre</span>
+                            <span class="filtro-cantidad">@ContarPorCategoria(categoria.Clave)</span>
+                        </button>
+                    }
                 </div>
             </div>
         </aside>
 
         <!-- CATÁLOGO DE PRODUCTOS -->
         <main class="col-lg-9">
-
-            <!-- ENCABEZADO -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-
-                <h2 class="fw-bold text-dark m-0">
-                    Nuestros Productos
-                </h2>
-
-                <span class="text-muted small">
-                    @ProductosFiltrados.Count productos
-                </span>
-
+                <h2 class="fw-bold text-dark m-0">Nuestros Productos</h2>
+                @if (!cargando)
+                {
+                    <span class="text-muted small">@ProductosFiltrados.Count productos</span>
+                }
             </div>
 
-            <!-- ESTADO DE CARGA -->
             @if (cargando)
             {
                 <div class="text-center py-5">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Cargando...</span>
                     </div>
-                    <p class="text-muted mt-3">
-                        Cargando productos...
-                    </p>
+                    <p class="text-muted mt-3">Cargando productos...</p>
                 </div>
             }
             else if (!string.IsNullOrEmpty(mensajeError))
@@ -166,9 +74,7 @@
                 <div class="alert alert-danger">
                     <i class="bi bi-exclamation-circle me-2"></i>
                     @mensajeError
-
-                    <button class="btn btn-outline-danger btn-sm ms-2"
-                            @onclick="CargarProductos">
+                    <button class="btn btn-outline-danger btn-sm ms-2" @onclick="CargarProductos">
                         Reintentar
                     </button>
                 </div>
@@ -177,14 +83,8 @@
             {
                 <div class="text-center py-5">
                     <i class="bi bi-inbox display-3 text-muted"></i>
-
-                    <h5 class="mt-3">
-                        No hay productos disponibles
-                    </h5>
-
-                    <p class="text-muted">
-                        No encontramos productos en esta categoría.
-                    </p>
+                    <h5 class="mt-3">No hay productos disponibles</h5>
+                    <p class="text-muted">No encontramos productos en esta categoría.</p>
                 </div>
             }
             else
@@ -192,11 +92,8 @@
                 <div class="row g-4">
                     @foreach (var producto in ProductosFiltrados)
                     {
-                        <div class="col-12 col-sm-6 col-xl-4"
-                             @key="producto.Id">
-
+                        <div class="col-12 col-sm-6 col-xl-4" @key="producto.Id">
                             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-
                                 <img src="@producto.Foto"
                                      alt="@producto.Titulo"
                                      class="card-img-top"
@@ -204,39 +101,92 @@
                                      style="height: 230px; object-fit: cover;" />
 
                                 <div class="card-body d-flex flex-column">
-
                                     <span class="badge bg-light text-primary border align-self-start mb-2">
                                         @producto.Categoria
                                     </span>
 
-                                    <h5 class="card-title fw-bold">
-                                        @producto.Titulo
-                                    </h5>
+                                    <h5 class="card-title fw-bold">@producto.Titulo</h5>
 
                                     @if (!string.IsNullOrWhiteSpace(producto.Descripcion))
                                     {
-                                        <p class="card-text text-muted small">
+                                        <p class="card-text text-muted small descripcion-corta">
                                             @producto.Descripcion
                                         </p>
                                     }
 
                                     <div class="mt-auto pt-3">
-                                        <button class="btn btn-dark w-100 rounded-3">
+                                        <button type="button"
+                                                class="btn btn-dark w-100 rounded-3"
+                                                @onclick="() => AbrirDetalle(producto)">
                                             <i class="bi bi-eye me-2"></i>
-                                            Ver producto
+                                            Ver más información
                                         </button>
                                     </div>
-
                                 </div>
-
                             </div>
-
                         </div>
                     }
                 </div>
             }
-
         </main>
-
     </div>
 </div>
+
+<!-- VENTANA EMERGENTE (MODAL) DE DETALLE -->
+<div class="detalle-fondo @(panelAbierto ? "visible" : "")" @onclick="CerrarDetalle"></div>
+
+<div class="detalle-modal-contenedor @(panelAbierto ? "abierto" : "")"
+     role="dialog" aria-modal="true" aria-label="Información del producto">
+    @if (productoSeleccionado is not null)
+    {
+        <div class="detalle-modal-grid">
+
+            <!-- MITAD IZQUIERDA: Foto vertical tocando arriba/abajo exacto y blur solo a los costados -->
+            <div class="detalle-foto-container">
+                <div class="foto-blur-bg" style="background-image: url('@productoSeleccionado.Foto');"></div>
+                <img src="@productoSeleccionado.Foto"
+                     alt="@productoSeleccionado.Titulo"
+                     class="foto-principal" />
+            </div>
+
+            <!-- MITAD DERECHA: Información -->
+            <div class="detalle-info-container">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <span class="badge bg-light text-primary border">
+                        @productoSeleccionado.Categoria
+                    </span>
+                    <button type="button" class="btn-close" aria-label="Cerrar" @onclick="CerrarDetalle"></button>
+                </div>
+
+                <h3 class="fw-bold text-dark h4 mb-3">@productoSeleccionado.Titulo</h3>
+
+                <div class="detalle-texto-scroll flex-grow-1 mb-4">
+                    @if (!string.IsNullOrWhiteSpace(productoSeleccionado.Descripcion))
+                    {
+                        <p class="text-muted detalle-texto m-0">@productoSeleccionado.Descripcion</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic m-0">Sin descripción disponible.</p>
+                    }
+                </div>
+
+                <div class="mt-auto pt-3 border-top">
+                    <button type="button" class="btn btn-dark w-100 rounded-3 py-2" @onclick="CerrarDetalle">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
+
+@if (panelAbierto)
+{
+    <style>
+        html, body {
+            overflow: hidden !important;
+        }
+    </style>
+}
