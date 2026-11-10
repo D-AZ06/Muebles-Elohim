@@ -1,4 +1,8 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@using Microsoft.JSInterop
 
 <div class="page">
     <div class="sidebar">
@@ -70,6 +74,40 @@
 </footer>
 
 
+@code {
+    private bool scrollPendiente = false;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += AlCambiarPagina;
+    }
+
+    private async void AlCambiarPagina(
+        object? sender,
+        LocationChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            scrollPendiente = true;
+            StateHasChanged();
+        });
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (scrollPendiente)
+        {
+            scrollPendiente = false;
+
+            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+        }
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= AlCambiarPagina;
+    }
+}
 
 
 <script>
@@ -95,3 +133,8 @@
     });
 </script>
 
+<script>
+    window.scrollToTop = () => {
+        window.scrollTo(0, 0);
+    };
+</script>
