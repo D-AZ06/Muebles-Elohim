@@ -1,0 +1,71 @@
+﻿@page "/contacto"
+@rendermode InteractiveServer
+
+<PageTitle>Contáctanos - Muebles Elohim</PageTitle>
+
+<div class="container py-4">
+    <!-- Encabezado de la página -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5 text-uppercase">Contáctanos</h1>
+        <p class="text-muted fs-5">Haciendo de tus espacios el lugar soñado</p>
+        <div class="mx-auto border-top border-primary border-3 title-divider"></div>
+    </div>
+
+    <div class="row g-4 align-items-stretch">
+        <!-- Columna de Datos de Contacto Directo -->
+        <div class="col-lg-5">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <h3 class="fw-bold mb-4 text-dark fs-4">Información de Atención</h3>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0 icon-circle">
+                        <i class="bi bi-geo-alt-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Ubicación</h6>
+                        <p class="text-secondary mb-0">Cartagena, Bolívar, Colombia</p>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0 icon-circle">
+                        <i class="bi bi-whatsapp fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Atención Directa por WhatsApp</h6>
+                        <p class="text-secondary mb-2">Resolvemos tus dudas y cotizaciones al instante.</p>
+                        <a href="@urlWhatsApp" target="_blank" class="btn btn-success font-weight-bold shadow-sm rounded-pill px-4">
+                            <i class="bi bi-whatsapp me-2"></i>Escribir por WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-start mb-4">
+                    <div class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center me-3 flex-shrink-0 icon-circle">
+                        <i class="bi bi-clock-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h6 class="fw-bold mb-1">Horario de Atención</h6>
+                        <p class="text-secondary mb-0">Lunes a Sábado: 8:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto pt-3 border-top text-center text-lg-start">
+                    <small class="text-muted">¿Tienes un diseño en mente o medidas específicas? Escríbenos directamente y te asesoramos con los mejores materiales.</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna del Mapa Google Maps -->
+        <div class="col-lg-7">
+            <div class="card h-100 border-0 shadow-sm overflow-hidden map-card">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d981.0552344014436!2d-75.46197879790358!3d10.404019427705933!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDI0JzE0LjYiTiA3NcKwMjcnNDEuNCJX!5e0!3m2!1ses!2sco!4v1794332459469!5m2!1ses!2sco"
+                        class="map-iframe"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
