@@ -1,5 +1,6 @@
-using Supabase;
 using Muebles_Elohim.Components;
+using Muebles_Elohim.Models;
+using Supabase;
 
 namespace Muebles_Elohim
 {
@@ -12,6 +13,9 @@ namespace Muebles_Elohim
             // Add services to the container.
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
+
+            builder.Services.Configure<ContactoOpciones>(
+            builder.Configuration.GetSection(ContactoOpciones.Seccion));
 
             // ==========================================
             // Configuración de Supabase
