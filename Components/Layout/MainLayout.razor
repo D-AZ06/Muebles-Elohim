@@ -3,6 +3,8 @@
 @inject NavigationManager Navigation
 @inject IJSRuntime JS
 @using Microsoft.JSInterop
+@using Muebles_Elohim.Components
+@using Muebles_Elohim.Components.Shared
 
 <div class="page">
     <div class="sidebar">
@@ -46,6 +48,8 @@
                          href="productos">
                     Productos
                 </NavLink>
+
+                <ContadorCotizacion />
 
                 <NavLink class="btn btn-primary px-3 text-white"
                          href="contacto">

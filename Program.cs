@@ -1,6 +1,7 @@
 using Muebles_Elohim.Components;
 using Muebles_Elohim.Models;
 using Supabase;
+using Muebles_Elohim.Services;
 
 namespace Muebles_Elohim
 {
@@ -16,6 +17,10 @@ namespace Muebles_Elohim
 
             builder.Services.Configure<ContactoOpciones>(
             builder.Configuration.GetSection(ContactoOpciones.Seccion));
+
+            builder.Services.AddScoped<ListaCotizacionServicio>();
+            builder.Services.AddScoped<CotizacionServicio>();
+
 
             // ==========================================
             // Configuración de Supabase

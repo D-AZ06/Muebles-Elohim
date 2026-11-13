@@ -1,0 +1,73 @@
+﻿@page "/cotizacion"
+@rendermode InteractiveServer
+@using Muebles_Elohim.Models
+
+<PageTitle>Mi cotización | Muebles Elohim</PageTitle>
+
+<section class="cotizacion">
+    <h1>Mi lista de cotización</h1>
+
+    @if (Lista.Items.Count == 0)
+    {
+        <p>Tu lista está vacía. Agrega los muebles que te interesen para cotizarlos.</p>
+        <a class="btn-whatsapp" href="/productos">Ver productos</a>
+    }
+    else
+    {
+        <ul class="items">
+            @foreach (ItemCotizacion item in Lista.Items)
+            {
+                <li class="item">
+                    @if (!string.IsNullOrEmpty(item.Imagen))
+                    {
+                        <img src="@item.Imagen" alt="@item.Nombre" />
+                    }
+                    <span class="nombre">@item.Nombre</span>
+                    <div class="cantidad">
+                        <button type="button" aria-label="Menos" @onclick="() => CambiarCantidad(item, item.Cantidad - 1)">−</button>
+                        <span>@item.Cantidad</span>
+                        <button type="button" aria-label="Más" @onclick="() => CambiarCantidad(item, item.Cantidad + 1)">+</button>
+                    </div>
+                    <button type="button" class="quitar" @onclick="() => Quitar(item)">Quitar</button>
+                </li>
+            }
+        </ul>
+
+        <h2>Tus datos</h2>
+
+        <label>
+            Nombre
+            <input type="text" class="campo" maxlength="100" autocomplete="name"
+                   @bind="_solicitud.Nombre" @bind:event="oninput" />
+        </label>
+
+        <label>
+            Teléfono
+            <input type="tel" class="campo" maxlength="20" autocomplete="tel"
+                   @bind="_solicitud.Telefono" @bind:event="oninput" />
+        </label>
+
+        @if (!Cotizaciones.TieneNumeroConfigurado())
+        {
+            <div class="aviso error">
+                <p>El WhatsApp del taller aún no está configurado. Intenta más tarde.</p>
+            </div>
+        }
+        else if (DatosValidos())
+        {
+            <a class="btn-whatsapp" href="@ObtenerUrlWhatsApp()" target="_blank" rel="noopener">
+                Enviar cotización por WhatsApp
+            </a>
+        }
+        else
+        {
+            <button type="button" class="btn-whatsapp" disabled>Enviar cotización por WhatsApp</button>
+            <p class="ayuda">Escribe tu nombre y tu teléfono para continuar.</p>
+        }
+
+        <p class="nota">
+            Se abrirá WhatsApp con tu mensaje listo para enviar. No guardamos tus datos en esta página
+            (<a href="/privacidad" target="_blank">política de privacidad</a>).
+        </p>
+    }
+</section>

@@ -1,0 +1,26 @@
+﻿.btn-cotizar {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    box-sizing: border-box;
+    border: 2px solid #f57c00;
+    border-radius: 0.5rem;
+    background: #f57c00;
+    color: #fff;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    .btn-cotizar:hover {
+        background: #e65100;
+        border-color: #e65100;
+        color: #fff;
+    }
+
+    .btn-cotizar.agregado {
+        background: #fff;
+        color: #f57c00;
+    }

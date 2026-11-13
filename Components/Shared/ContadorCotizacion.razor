@@ -1,0 +1,37 @@
+﻿@implements IDisposable
+@inject Muebles_Elohim.Services.ListaCotizacionServicio Lista
+@rendermode InteractiveServer
+
+<a class="text-decoration-none text-secondary px-2 contador-cotizacion" href="/cotizacion">
+    Mi cotización
+    @if (Lista.TotalUnidades() > 0)
+    {
+        <span class="insignia">@Lista.TotalUnidades()</span>
+    }
+</a>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Lista.OnChange += Refrescar;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Carga la lista guardada en el navegador
+            await Lista.InicializarAsync();
+        }
+    }
+
+    private void Refrescar()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Lista.OnChange -= Refrescar;
+    }
+}

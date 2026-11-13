@@ -1,0 +1,43 @@
+﻿@implements IDisposable
+@inject Services.ListaCotizacionServicio Lista
+
+@* Botón para poner en cada tarjeta de producto *@
+@if (Lista.Contiene(ProductoId))
+{
+    <a class="btn-cotizar agregado" href="/cotizacion">En tu lista (@Lista.CantidadDe(ProductoId)) · Ver</a>
+}
+else
+{
+    <button type="button" class="btn-cotizar" @onclick="Agregar">Agregar a cotización</button>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public string ProductoId { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public string Nombre { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Imagen { get; set; } = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        Lista.OnChange += Refrescar;
+    }
+
+    private void Refrescar()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task Agregar()
+    {
+        await Lista.AgregarAsync(ProductoId, Nombre, Imagen);
+    }
+
+    public void Dispose()
+    {
+        Lista.OnChange -= Refrescar;
+    }
+}
