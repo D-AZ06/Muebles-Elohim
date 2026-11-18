@@ -20,7 +20,8 @@ namespace Muebles_Elohim.Components.Pages
             new("entretenimiento", "Centro de entretenimiento", "bi-tv"),
             new("cocina", "Cocina", "bi-cup-hot"),
             new("bano", "Baño", "bi-droplet"),
-            new("muebles", "Muebles", "bi-house-door")
+            new("muebles", "Muebles", "bi-house-door"),
+            new("closet", "Closet", "bi-layout-text-sidebar-reverse")
         };
 
         // Lista de productos
@@ -134,6 +135,9 @@ namespace Muebles_Elohim.Components.Pages
 
                 case "muebles":
                     return nombre.Contains("muebles");
+
+                case "closet":
+                    return nombre.Contains("closet");
 
                 default:
                     return false;
