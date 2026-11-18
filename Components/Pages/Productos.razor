@@ -5,6 +5,16 @@
 
 <PageTitle>Productos - Muebles Elohim</PageTitle>
 
+@if (panelAbierto && productoSeleccionado is not null)
+{
+    <HeadContent>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="@productoSeleccionado.Titulo - Muebles Elohim" />
+        <meta property="og:description" content="@productoSeleccionado.Descripcion" />
+        <meta property="og:image" content="@productoSeleccionado.Foto" />
+    </HeadContent>
+}
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <!-- CLASE CONDICIONAL "bloqueado" para evitar scroll y clics en el fondo -->
@@ -143,6 +153,7 @@
 <div class="detalle-fondo @(panelAbierto ? "visible" : "")" @onclick="CerrarDetalle"></div>
 
 <div class="detalle-modal-contenedor @(panelAbierto ? "abierto" : "")"
+     @ref="modalRef" tabindex="-1" style="outline:none" @onkeydown="TeclaModal"
      role="dialog" aria-modal="true" aria-label="Información del producto">
     @if (productoSeleccionado is not null)
     {
@@ -178,15 +189,24 @@
                     }
                 </div>
 
-                <div class="mt-auto pt-3 border-top">
+                <div class="mt-auto pt-3 border-top"
+                     style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:.5rem; flex-shrink:0;">
 
-                    <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
-                                            Nombre="@productoSeleccionado.Titulo"
-                                            Imagen="@productoSeleccionado.Foto" />
-
-                    <button type="button" class="btn btn-dark w-100 rounded-3 py-2" @onclick="CerrarDetalle">
-                        Cerrar
+                    <button type="button"
+                            class="btn btn-outline-secondary rounded-3"
+                            style="flex:0 0 44px; width:44px; height:44px; padding:0; margin:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem;"
+                            aria-label="Copiar enlace"
+                            title="Copiar enlace"
+                            @onclick="CopiarEnlace">
+                        <i class="bi @(enlaceCopiado ? "bi-check2" : "bi-link-45deg")"></i>
                     </button>
+
+                    <div style="flex:1 1 auto; min-width:0;">
+                        <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
+                                                Nombre="@productoSeleccionado.Titulo"
+                                                Imagen="@productoSeleccionado.Foto" />
+                    </div>
+
                 </div>
             </div>
 
@@ -200,5 +220,101 @@
         html, body {
             overflow: hidden !important;
         }
+
+        /* ===== Botones (escritorio ≥ 1024px: a los lados de la tarjeta) ===== */
+        .nav-circulo {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 52px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, .35);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .18);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+            z-index: 1060;
+            cursor: pointer;
+            transition: background-color .2s ease, transform .2s ease;
+        }
+
+            .nav-circulo:hover {
+                background: rgba(255, 255, 255, .32);
+                transform: translateY(-50%) scale(1.08);
+            }
+
+            .nav-circulo.izq {
+                left: calc(50% - 440px - 64px);
+            }
+
+            .nav-circulo.der {
+                right: calc(50% - 440px - 64px);
+            }
+
+        /* ===== Menos de 1024px: botones juntos, debajo de la tarjeta ===== */
+        @@media (max-width: 1023.98px) {
+            .nav-circulo {
+                width: 48px;
+                height: 48px;
+                top: auto;
+                bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+                transform: none;
+            }
+
+                .nav-circulo:hover {
+                    transform: scale(1.08);
+                }
+
+                .nav-circulo.izq {
+                    left: auto;
+                    right: calc(50% + 10px);
+                }
+
+                .nav-circulo.der {
+                    right: auto;
+                    left: calc(50% + 10px);
+                }
+            /* Se sube la tarjeta y se limita su altura para dejar sitio a los botones */
+            .detalle-modal-contenedor {
+                top: calc(50% - 36px) !important;
+                max-height: calc(100dvh - 130px) !important;
+            }
+        }
+
+        /* Tablet (2 columnas): altura fija de 520px, pero nunca más de lo que cabe */
+        @@media (min-width: 768px) and (max-width: 1023.98px) {
+            .detalle-modal-contenedor {
+                height: min(520px, calc(100dvh - 130px)) !important;
+            }
+        }
+
+        /* Móvil (1 columna): el texto hace scroll dentro de lo que sobra bajo la foto */
+        @@media (max-width: 767.98px) {
+            .detalle-info-container {
+                max-height: calc(100dvh - 130px - 280px) !important;
+            }
+        }
     </style>
+
+    <button type="button"
+            class="nav-circulo izq"
+            aria-label="Anterior"
+            @onclick="() => CambiarProducto(-1)">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+
+    <button type="button"
+            class="nav-circulo der"
+            aria-label="Siguiente"
+            @onclick="() => CambiarProducto(1)">
+        <i class="bi bi-chevron-right"></i>
+    </button>
 }
+

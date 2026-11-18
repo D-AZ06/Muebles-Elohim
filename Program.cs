@@ -21,6 +21,9 @@ namespace Muebles_Elohim
             builder.Services.AddScoped<ListaCotizacionServicio>();
             builder.Services.AddScoped<CotizacionServicio>();
 
+            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<CatalogoServicio>();
+
 
             // ==========================================
             // Configuración de Supabase

@@ -4,6 +4,14 @@
 
 <PageTitle>Mi cotización | Muebles Elohim</PageTitle>
 
+@if (ultimoQuitado is not null)
+{
+    <p class="ayuda">
+        Quitaste "@ultimoQuitado.Nombre".
+        <button type="button" class="quitar" @onclick="Deshacer">Deshacer</button>
+    </p>
+}
+
 <section class="cotizacion">
     <h1>Mi lista de cotización</h1>
 
@@ -32,6 +40,8 @@
                 </li>
             }
         </ul>
+
+        <button type="button" class="quitar" @onclick="Vaciar">Vaciar lista</button>
 
         <h2>Tus datos</h2>
 

@@ -14,11 +14,6 @@
 
     new MutationObserver(initFloatingBtn).observe(document.body, { childList: true, subtree: true });
     initFloatingBtn();
-
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-
-    // Blazor pinta la vista después de cargar el script y al navegar
-    new MutationObserver(update).observe(document.body, { childList: true, subtree: true });
-    update();
+    server(update).observe(document.body, { childList: true, subtree: true });
+    // update();
 })();

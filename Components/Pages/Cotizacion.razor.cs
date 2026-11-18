@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Muebles_Elohim.Models;
 using Muebles_Elohim.Services;
+using Microsoft.JSInterop;
 
 namespace Muebles_Elohim.Components.Pages
 {
@@ -11,6 +12,11 @@ namespace Muebles_Elohim.Components.Pages
 
         [Inject]
         private CotizacionServicio Cotizaciones { get; set; } = default!;
+
+        [Inject]
+        private IJSRuntime JS { get; set; } = default!;
+
+        private ItemCotizacion? ultimoQuitado;
 
         private SolicitudCotizacion _solicitud = new SolicitudCotizacion();
 
@@ -39,7 +45,32 @@ namespace Muebles_Elohim.Components.Pages
 
         private async Task Quitar(ItemCotizacion item)
         {
+            ultimoQuitado = new ItemCotizacion
+            {
+                ProductoId = item.ProductoId,
+                Nombre = item.Nombre,
+                Imagen = item.Imagen,
+                Cantidad = item.Cantidad
+            };
             await Lista.QuitarAsync(item.ProductoId);
+        }
+
+        private async Task Deshacer()
+        {
+            if (ultimoQuitado is null) return;
+
+            await Lista.AgregarAsync(ultimoQuitado.ProductoId, ultimoQuitado.Nombre, ultimoQuitado.Imagen);
+            await Lista.CambiarCantidadAsync(ultimoQuitado.ProductoId, ultimoQuitado.Cantidad);
+            ultimoQuitado = null;
+        }
+
+        private async Task Vaciar()
+        {
+            if (await JS.InvokeAsync<bool>("confirm", "¿Vaciar toda la lista?"))
+            {
+                ultimoQuitado = null;
+                await Lista.VaciarAsync();
+            }
         }
 
         // El botón de WhatsApp solo se activa con nombre y teléfono razonables

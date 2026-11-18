@@ -77,43 +77,6 @@
 	</div>
 </footer>
 
-
-@code {
-    private bool scrollPendiente = false;
-
-    protected override void OnInitialized()
-    {
-        Navigation.LocationChanged += AlCambiarPagina;
-    }
-
-    private async void AlCambiarPagina(
-        object? sender,
-        LocationChangedEventArgs e)
-    {
-        await InvokeAsync(() =>
-        {
-            scrollPendiente = true;
-            StateHasChanged();
-        });
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (scrollPendiente)
-        {
-            scrollPendiente = false;
-
-            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
-        }
-    }
-
-    public void Dispose()
-    {
-        Navigation.LocationChanged -= AlCambiarPagina;
-    }
-}
-
-
 <script>
         window.addEventListener('scroll', () => {
 
@@ -137,8 +100,65 @@
     });
 </script>
 
-<script>
-    window.scrollToTop = () => {
-        window.scrollTo(0, 0);
-    };
-</script>
+
+@code {
+    private bool scrollPendiente = false;
+    private string rutaAnterior = "";
+
+    protected override void OnInitialized()
+    {
+        rutaAnterior = RutaSinQuery(Navigation.Uri);
+        Navigation.LocationChanged += AlCambiarPagina;
+    }
+
+    private async void AlCambiarPagina(
+        object? sender,
+        LocationChangedEventArgs e)
+    {
+        string rutaNueva = RutaSinQuery(e.Location);
+
+        // Si solo cambió ?id=, es el modal: no se sube al inicio
+        if (rutaNueva == rutaAnterior)
+        {
+            return;
+        }
+
+        rutaAnterior = rutaNueva;
+
+        await InvokeAsync(() =>
+        {
+            scrollPendiente = true;
+            StateHasChanged();
+        });
+    }
+
+    private string RutaSinQuery(string uri)
+    {
+        string ruta = Navigation.ToBaseRelativePath(uri);
+        int corte = ruta.IndexOfAny(new[] { '?', '#' });
+
+        if (corte >= 0)
+        {
+            return ruta.Substring(0, corte);
+        }
+
+        return ruta;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (scrollPendiente)
+        {
+            scrollPendiente = false;
+
+            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+        }
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= AlCambiarPagina;
+    }
+
+
+}

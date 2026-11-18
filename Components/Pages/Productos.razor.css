@@ -189,17 +189,18 @@
     .detalle-modal-contenedor {
         width: 94%;
         height: auto;
-        max-height: 90vh;
+        top: calc(50% - 40px);
+        max-height: calc(100dvh - 150px);
     }
 
     .detalle-modal-grid {
         grid-template-columns: 1fr;
-        grid-template-rows: 280px auto;
+        /* grid-template-rows: 280px auto; */
         height: auto;
     }
 
     .detalle-foto-container {
-        height: 280px;
+        /* height: 280px; */ 
     }
 
     .foto-principal {
@@ -210,7 +211,7 @@
 
     .detalle-info-container {
         height: auto;
-        max-height: calc(90vh - 280px);
+        /* max-height: calc(100dvh - 150px - 280px); */ 
         padding: 1.25rem;
     }
 }
@@ -219,5 +220,76 @@
     .detalle-modal-contenedor,
     .detalle-fondo {
         transition: none;
+    }
+}
+
+
+/* Solo la descripción hace scroll; los botones quedan fijos abajo */
+.detalle-info-container {
+    overflow: hidden !important;
+}
+
+.detalle-texto-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.detalle-acciones {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.btn-accion-icono {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.detalle-acciones-cotizar {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+    .detalle-acciones-cotizar ::deep > * {
+        margin: 0 !important;
+        width: 100%;
+    }
+
+    .detalle-acciones-cotizar ::deep button,
+    .detalle-acciones-cotizar ::deep .btn {
+        width: 100% !important;
+        height: 44px;
+        margin: 0 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+/* Móvil: la foto cede altura en pantallas bajas para que quepa más descripción */
+@media (max-width: 767.98px) {
+    .detalle-modal-contenedor {
+        --foto-alto: clamp(170px, 32dvh, 280px);
+    }
+
+    .detalle-modal-grid {
+        grid-template-rows: var(--foto-alto) auto !important;
+    }
+
+    .detalle-foto-container {
+        height: var(--foto-alto) !important;
+    }
+
+    .detalle-info-container {
+        max-height: calc(100dvh - 130px - var(--foto-alto)) !important;
     }
 }

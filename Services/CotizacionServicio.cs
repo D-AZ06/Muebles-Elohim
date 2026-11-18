@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Microsoft.Extensions.Options;
 using Muebles_Elohim.Models;
+using Microsoft.AspNetCore.Components;
 
 namespace Muebles_Elohim.Services
 {
@@ -8,11 +9,14 @@ namespace Muebles_Elohim.Services
     public class CotizacionServicio
     {
         private readonly ContactoOpciones _contacto;
+        private readonly NavigationManager _navegacion;
 
-        public CotizacionServicio(IOptions<ContactoOpciones > contacto)
+        public CotizacionServicio(IOptions<ContactoOpciones> contacto, NavigationManager navegacion)
         {
             _contacto = contacto.Value;
+            _navegacion = navegacion;
         }
+
 
         public bool TieneNumeroConfigurado()
         {
@@ -39,7 +43,11 @@ namespace Muebles_Elohim.Services
 
             foreach (ItemCotizacion item in items)
             {
-                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad);
+                string enlace = _navegacion
+                    .ToAbsoluteUri("productos?id=" + Uri.EscapeDataString(item.ProductoId))
+                    .ToString();
+
+                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + enlace);
             }
 
             string codificado;

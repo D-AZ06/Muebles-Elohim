@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Muebles_Elohim.Models;
+using Muebles_Elohim.Services;
 using Supabase.Postgrest;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace Muebles_Elohim.Components.Pages
 {
@@ -10,6 +12,37 @@ namespace Muebles_Elohim.Components.Pages
         // Cliente de Supabase registrado en Program.cs
         [Inject]
         public Supabase.Client SupabaseClient { get; set; } = default!;
+
+        [Inject]
+        private NavigationManager Navegacion { get; set; } = default!;
+
+        [Inject]
+        private IJSRuntime JS { get; set; } = default!;
+
+        [Inject]
+        private CatalogoServicio Catalogo { get; set; } = default!;
+
+        // Id que viene en la URL: /productos?id=12
+        [SupplyParameterFromQuery(Name = "id")]
+        public int? IdProducto { get; set; }
+
+        private bool enlaceCopiado;
+
+        private ElementReference modalRef;
+        private bool enfocarModal;
+
+        private string TituloPagina
+        {
+            get
+            {
+                if (panelAbierto && productoSeleccionado is not null)
+                {
+                    return productoSeleccionado.Titulo + " - Muebles Elohim";
+                }
+
+                return "Productos - Muebles Elohim";
+            }
+        }
 
         // Categorías del filtro (la clave es la que usa CoincideCategoria)
         private record CategoriaFiltro(string Clave, string Nombre, string Icono);
@@ -60,6 +93,34 @@ namespace Muebles_Elohim.Components.Pages
             await CargarProductos();
         }
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (enfocarModal && panelAbierto)
+            {
+                enfocarModal = false;
+                await modalRef.FocusAsync();
+            }
+        }
+
+        private void CambiarProducto(int paso)
+        {
+            var lista = ProductosFiltrados;
+            int i = lista.FindIndex(p => p.Id == productoSeleccionado?.Id);
+            if (i < 0) return;
+
+            int nuevo = (i + paso + lista.Count) % lista.Count;
+            Navegacion.NavigateTo("productos?id=" + lista[nuevo].Id);
+        }
+
+        private void TeclaModal(KeyboardEventArgs e)
+        {
+            if (!panelAbierto) return;
+
+            if (e.Key == "Escape") CerrarDetalle();
+            else if (e.Key == "ArrowRight") CambiarProducto(1);
+            else if (e.Key == "ArrowLeft") CambiarProducto(-1);
+        }
+
         // Consultar información de Supabase
         private async Task CargarProductos()
         {
@@ -67,17 +128,20 @@ namespace Muebles_Elohim.Components.Pages
             {
                 cargando = true;
                 mensajeError = "";
-
+                
+                /*
                 var respuesta = await SupabaseClient
                     .From<CatalogoFoto>()
                     .Get();
 
-                Console.WriteLine("Contenido: " + respuesta.Content);
-                Console.WriteLine("Cantidad: " + respuesta.Models.Count);
-
                 productos = respuesta.Models
                     .OrderBy(p => p.Id)
                     .ToList();
+                */
+
+                productos = await Catalogo.ObtenerAsync();
+
+                SincronizarDetalleConUrl();
             }
             catch (Exception ex)
             {
@@ -88,21 +152,36 @@ namespace Muebles_Elohim.Components.Pages
                 cargando = false;
             }
         }
-        private void SeleccionarCategoria(string categoria)
+        private async Task SeleccionarCategoria(string categoria)
         {
             categoriaSeleccionada = categoria;
             panelAbierto = false;
+
+            if (IdProducto is not null)
+            {
+                Navegacion.NavigateTo("productos");
+            }
+
+            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
         }
 
         private void AbrirDetalle(CatalogoFoto producto)
         {
             productoSeleccionado = producto;
             panelAbierto = true;
+            enlaceCopiado = false;
+
+            Navegacion.NavigateTo("productos?id=" + producto.Id);
         }
 
         private void CerrarDetalle()
         {
             panelAbierto = false;
+
+            if (IdProducto is not null)
+            {
+                Navegacion.NavigateTo("productos");
+            }
         }
 
         // Cantidad de productos por categoría (para el contador del filtro)
@@ -141,6 +220,62 @@ namespace Muebles_Elohim.Components.Pages
 
                 default:
                     return false;
+            }
+        }
+
+        // La URL manda: si trae ?id=, se abre ese producto; si no, se cierra el detalle
+        protected override void OnParametersSet()
+        {
+            SincronizarDetalleConUrl();
+        }
+
+        private void SincronizarDetalleConUrl()
+        {
+            if (IdProducto is null)
+            {
+                panelAbierto = false;
+                return;
+            }
+
+            CatalogoFoto? encontrado = productos.FirstOrDefault(p => p.Id == IdProducto.Value);
+
+            if (encontrado is null)
+            {
+                panelAbierto = false;
+                return;
+            }
+
+            productoSeleccionado = encontrado;
+            panelAbierto = true;
+            enlaceCopiado = false;
+            enfocarModal = true;
+        }
+
+        private async Task CopiarEnlace()
+        {
+            if (productoSeleccionado is null)
+            {
+                return;
+            }
+
+            string enlace = Navegacion.ToAbsoluteUri("productos?id=" + productoSeleccionado.Id).ToString();
+
+            try
+            {
+                await JS.InvokeVoidAsync("navigator.clipboard.writeText", enlace);
+                enlaceCopiado = true;
+                StateHasChanged();
+
+                await Task.Delay(2000);
+                enlaceCopiado = false;
+            }
+            catch (JSException)
+            {
+                // El navegador no permitió copiar
+            }
+            catch (JSDisconnectedException)
+            {
+                // El circuito se cerró
             }
         }
     }
