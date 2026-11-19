@@ -49,3 +49,59 @@ h1:focus {
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
+
+/* ===== MENÚ MÓVIL: que quepa en pantallas angostas ===== */
+@media (max-width: 768px) {
+    .top-row nav {
+        gap: .15rem !important;
+        min-width: 0;
+    }
+
+        .top-row nav a {
+            font-size: .75rem !important;
+            white-space: nowrap !important;
+            padding-left: .3rem !important;
+            padding-right: .3rem !important;
+        }
+
+        .top-row nav .btn {
+            padding-left: .6rem !important;
+            padding-right: .6rem !important;
+        }
+
+    #logoSticky {
+        display: none !important;
+    }
+}
+
+@media (max-width: 359.98px) {
+    .top-row {
+        padding: 0 6px !important;
+    }
+
+        .top-row nav a {
+            font-size: .68rem !important;
+            padding-left: .2rem !important;
+            padding-right: .2rem !important;
+        }
+
+        .top-row nav .btn {
+            padding-left: .4rem !important;
+            padding-right: .4rem !important;
+        }
+
+    .contador-cotizacion {
+        gap: .2rem !important;
+    }
+
+    .insignia {
+        min-width: 1.1rem !important;
+        padding: 0 .25rem !important;
+        font-size: .65rem !important;
+    }
+}
+
+/* Red de seguridad: clip no rompe los elementos sticky */
+html, body {
+    overflow-x: clip;
+}

@@ -1,8 +1,15 @@
 ﻿.floating-wrapper {
-    position: sticky;
-    bottom: 25px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: calc(25px + var(--footer-lift, 0px));
     height: 0;
     z-index: 1000;
+    pointer-events: none;
+}
+
+.floating-spacer {
+    height: 100px;
 }
 
 #floatingSentinel {
@@ -17,7 +24,8 @@
     left: 100%;
     width: 55px;
     height: 55px;
-    transform: translateX(calc(-100% + 1.5rem - 25px));
+    pointer-events: auto;
+    transform: translateX(calc(-100% - 25px));
     transition: left .7s cubic-bezier(.25, 1, .5, 1), transform .7s cubic-bezier(.25, 1, .5, 1), width .7s cubic-bezier(.25, 1, .5, 1);
 }
 

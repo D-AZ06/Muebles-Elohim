@@ -108,12 +108,25 @@
         }
 
             .top-row nav {
-                gap: .5rem;
+                gap: .15rem;
+                min-width: 0;
             }
 
                 .top-row nav a {
-                    font-size: .85rem;
+                    font-size: .75rem;
+                    white-space: nowrap;
+                    padding-left: .3rem !important;
+                    padding-right: .3rem !important;
                 }
+
+                .top-row nav .btn {
+                    padding-left: .6rem !important;
+                    padding-right: .6rem !important;
+                }
+
+        #logoSticky {
+            display: none;
+        }
 
         .logo-mini {
             width: 24px;
