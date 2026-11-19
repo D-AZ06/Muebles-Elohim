@@ -5,7 +5,6 @@
 @using Microsoft.JSInterop
 @using Muebles_Elohim.Components
 @using Muebles_Elohim.Components.Shared
-@inject Microsoft.Extensions.Options.IOptions<ContactoOpciones> Contacto
 
 <div class="page">
 
@@ -60,18 +59,11 @@
 
         <article class="content px-4 py-3">
             @Body
+            <BotonesFlotantes />
         </article>
 
     </main>
 </div>
-
-@if (!string.IsNullOrEmpty(urlWhatsApp))
-{
-    <a href="@urlWhatsApp" target="_blank" rel="noopener"
-       class="whatsapp-flotante" aria-label="Escribir por WhatsApp">
-        <i class="bi bi-whatsapp"></i>
-    </a>
-}
 
 <footer class="footer bg-dark text-white py-4 mt-auto">
     <div class="container text-center">
@@ -110,20 +102,11 @@
 @code {
     private bool scrollPendiente = false;
     private string rutaAnterior = "";
-    private string urlWhatsApp = string.Empty;
 
     protected override void OnInitialized()
     {
         rutaAnterior = RutaSinQuery(Navigation.Uri);
         Navigation.LocationChanged += AlCambiarPagina;
-
-        string numero = new string(Contacto.Value.WhatsApp.Where(char.IsDigit).ToArray());
-
-        if (numero.Length > 0)
-        {
-            urlWhatsApp = "https://wa.me/" + numero + "?text="
-                + Uri.EscapeDataString("¡Hola! Me comunico desde la página web de Muebles Elohim, me gustaría solicitar información.");
-        }
     }
 
     private async void AlCambiarPagina(

@@ -1,0 +1,61 @@
+﻿@implements IDisposable
+@inject NavigationManager Navegacion
+@inject Microsoft.Extensions.Options.IOptions<ContactoOpciones> Contacto
+
+@if (!Oculto)
+{
+    <div class="floating-wrapper @(EsInicio ? "doble" : "")">
+        <div class="floating-btn-container">
+            @if (EsInicio)
+            {
+                <a href="productos" class="btn btn-productos">
+                    <i class="bi bi-shop"></i>
+                    <span class="btn-text">Ver Productos</span>
+                </a>
+            }
+
+            @if (!string.IsNullOrEmpty(urlWhatsApp))
+            {
+                <a href="@urlWhatsApp" target="_blank" rel="noopener"
+                   class="btn btn-whatsapp-flotante" aria-label="Escribir por WhatsApp">
+                    <i class="bi bi-whatsapp"></i>
+                    <span class="btn-text">WhatsApp</span>
+                </a>
+            }
+        </div>
+    </div>
+    <div id="floatingSentinel"></div>
+}
+
+@code {
+    private string urlWhatsApp = string.Empty;
+
+    private string Ruta =>
+        Navegacion.ToBaseRelativePath(Navegacion.Uri).Split('?', '#')[0].TrimEnd('/').ToLowerInvariant();
+
+    private bool EsInicio => Ruta == "";
+    private bool Oculto => Ruta == "contacto" || Ruta == "cotizacion";
+
+    protected override void OnInitialized()
+    {
+        Navegacion.LocationChanged += AlCambiarPagina;
+
+        string numero = new string(Contacto.Value.WhatsApp.Where(char.IsDigit).ToArray());
+
+        if (numero.Length > 0)
+        {
+            urlWhatsApp = "https://wa.me/" + numero + "?text="
+                + Uri.EscapeDataString("¡Hola! Me comunico desde la página web de Muebles Elohim, me gustaría solicitar información.");
+        }
+    }
+
+    private void AlCambiarPagina(object? sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Navegacion.LocationChanged -= AlCambiarPagina;
+    }
+}
