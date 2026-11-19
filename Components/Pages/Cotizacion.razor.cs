@@ -76,31 +76,16 @@ namespace Muebles_Elohim.Components.Pages
         // El botón de WhatsApp solo se activa con nombre y teléfono razonables
         private bool DatosValidos()
         {
-            string nombre;
-            nombre = _solicitud.Nombre.Trim();
+            if (_solicitud.Nombre.Trim().Length < 2) return false;
+            if (!_solicitud.AceptaDatos) return false;
 
-            if (nombre.Length < 2)
+            int digitos = 0;
+            foreach (char c in _solicitud.Telefono)
             {
-                return false;
+                if (char.IsDigit(c)) digitos++;
             }
 
-            int digitos;
-            digitos = 0;
-
-            foreach (char caracter in _solicitud.Telefono)
-            {
-                if (char.IsDigit(caracter))
-                {
-                    digitos = digitos + 1;
-                }
-            }
-
-            if (digitos < 7)
-            {
-                return false;
-            }
-
-            return true;
+            return digitos >= 7;
         }
 
         private string ObtenerUrlWhatsApp()

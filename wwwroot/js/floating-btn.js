@@ -1,6 +1,4 @@
 ﻿(function () {
-    const GAP = 20; // separación fija entre el botón y el footer
-
     function initFloatingBtn() {
         const sentinel = document.getElementById('floatingSentinel');
         const btn = document.querySelector('.floating-btn-container');
@@ -14,6 +12,4 @@
 
     new MutationObserver(initFloatingBtn).observe(document.body, { childList: true, subtree: true });
     initFloatingBtn();
-    server(update).observe(document.body, { childList: true, subtree: true });
-    // update();
 })();

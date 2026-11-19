@@ -33,27 +33,31 @@ namespace Muebles_Elohim.Services
 
         public string ConstruirUrlWhatsApp(SolicitudCotizacion solicitud, IReadOnlyList<ItemCotizacion> items)
         {
-            string numero;
-            numero = SoloDigitos(_contacto.WhatsApp);
+            string numero = SoloDigitos(_contacto.WhatsApp);
 
-            // Formato fijo del mensaje: así un bot lo podrá leer fácilmente más adelante
             StringBuilder texto = new StringBuilder();
+            texto.AppendLine("Cotización " + solicitud.Codigo);
             texto.AppendLine("Hola, soy " + solicitud.Nombre.Trim() + " (" + solicitud.Telefono.Trim() + ").");
             texto.AppendLine("Quiero cotizar:");
 
             foreach (ItemCotizacion item in items)
             {
-                string enlace = _navegacion
-                    .ToAbsoluteUri("productos?id=" + Uri.EscapeDataString(item.ProductoId))
-                    .ToString();
-
-                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + enlace);
+                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + EnlaceProducto(item.ProductoId));
             }
 
-            string codificado;
-            codificado = Uri.EscapeDataString(texto.ToString());
+            return "https://wa.me/" + numero + "?text=" + Uri.EscapeDataString(texto.ToString());
+        }
 
-            return "https://wa.me/" + numero + "?text=" + codificado;
+        private string EnlaceProducto(string id)
+        {
+            string ruta = "productos?id=" + Uri.EscapeDataString(id);
+
+            if (!string.IsNullOrWhiteSpace(_contacto.SitioUrl))
+            {
+                return _contacto.SitioUrl.TrimEnd('/') + "/" + ruta;
+            }
+
+            return _navegacion.ToAbsoluteUri(ruta).ToString();
         }
 
         // wa.me exige solo números: sin "+", espacios ni guiones

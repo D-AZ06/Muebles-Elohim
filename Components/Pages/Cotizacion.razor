@@ -57,6 +57,12 @@
                    @bind="_solicitud.Telefono" @bind:event="oninput" />
         </label>
 
+        <label>
+            <input type="checkbox" @bind="_solicitud.AceptaDatos" />
+            Autorizo el tratamiento de mis datos para recibir la cotización
+            (<a href="/privacidad" target="_blank">política de privacidad</a>).
+        </label>
+
         @if (!Cotizaciones.TieneNumeroConfigurado())
         {
             <div class="aviso error">
@@ -65,14 +71,25 @@
         }
         else if (DatosValidos())
         {
-            <a class="btn-whatsapp" href="@ObtenerUrlWhatsApp()" target="_blank" rel="noopener">
-                Enviar cotización por WhatsApp
-            </a>
+            string url = ObtenerUrlWhatsApp();
+
+            @if (url.Length > 2000)
+            {
+                <div class="aviso error">
+                    <p>Tu lista es muy larga para enviarla en un solo mensaje. Quita algunos productos o envíala en dos cotizaciones.</p>
+                </div>
+            }
+            else
+            {
+                <a class="btn-whatsapp" href="@url" target="_blank" rel="noopener">
+                    Enviar cotización por WhatsApp
+                </a>
+            }
         }
         else
         {
             <button type="button" class="btn-whatsapp" disabled>Enviar cotización por WhatsApp</button>
-            <p class="ayuda">Escribe tu nombre y tu teléfono para continuar.</p>
+            <p class="ayuda">Completa nombre, teléfono y ciudad, y autoriza el tratamiento de datos.</p>
         }
 
         <p class="nota">

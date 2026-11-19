@@ -12,5 +12,6 @@
         public string WhatsApp { get; set; } = string.Empty;
 
         public string Correo { get; set; } = string.Empty;
+        public string SitioUrl { get; set; } = string.Empty;
     }
 }
