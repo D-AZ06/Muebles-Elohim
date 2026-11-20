@@ -293,3 +293,29 @@
         max-height: calc(100dvh - 130px - var(--foto-alto)) !important;
     }
 }
+
+/* Botón para ver la foto completa (esquina inferior derecha de la imagen) */
+.btn-ver-foto {
+    position: absolute;
+    right: .75rem;
+    bottom: .75rem;
+    z-index: 3;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 50%;
+    background: rgba(0, 0, 0, .45);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+
+    .btn-ver-foto:hover {
+        background: rgba(0, 0, 0, .7);
+    }

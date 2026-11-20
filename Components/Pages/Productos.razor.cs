@@ -63,6 +63,24 @@ namespace Muebles_Elohim.Components.Pages
         // Categoría seleccionada
         private string categoriaSeleccionada = "todos";
 
+        private const int ProductosPorPagina = 12;
+        private int paginaActual = 1;
+
+        private int TotalPaginas =>
+            Math.Max(1, (int)Math.Ceiling(ProductosFiltrados.Count / (double)ProductosPorPagina));
+
+        private List<CatalogoFoto> ProductosPagina =>
+            ProductosFiltrados
+                .Skip((paginaActual - 1) * ProductosPorPagina)
+                .Take(ProductosPorPagina)
+                .ToList();
+
+        private async Task IrAPagina(int pagina)
+        {
+            paginaActual = Math.Clamp(pagina, 1, TotalPaginas);
+            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+        }
+
         // Panel de detalle (el producto se conserva al cerrar para que no se vacíe durante la animación)
         private CatalogoFoto? productoSeleccionado;
         private bool panelAbierto;
@@ -155,6 +173,7 @@ namespace Muebles_Elohim.Components.Pages
         private async Task SeleccionarCategoria(string categoria)
         {
             categoriaSeleccionada = categoria;
+            paginaActual = 1;
             panelAbierto = false;
 
             if (IdProducto is not null)

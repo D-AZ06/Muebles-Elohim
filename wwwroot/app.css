@@ -105,3 +105,81 @@ h1:focus {
 html, body {
     overflow-x: clip;
 }
+
+/* ===== VISOR DE IMAGEN (zoom) ===== */
+.visor-img {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, .94);
+}
+
+.visor-stage {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: zoom-in;
+}
+
+    .visor-stage.con-zoom {
+        cursor: grab;
+    }
+
+        .visor-stage.con-zoom:active {
+            cursor: grabbing;
+        }
+
+.visor-foto {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    transform-origin: center center;
+    will-change: transform;
+    -webkit-user-drag: none;
+    pointer-events: none;
+}
+
+.visor-cerrar,
+.visor-barra button {
+    width: 46px;
+    height: 46px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .3);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .16);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    color: #fff;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+    .visor-cerrar:hover,
+    .visor-barra button:hover {
+        background: rgba(255, 255, 255, .3);
+    }
+
+.visor-cerrar {
+    position: absolute;
+    top: calc(14px + env(safe-area-inset-top, 0px));
+    right: 14px;
+}
+
+.visor-barra {
+    position: absolute;
+    left: 50%;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    display: flex;
+    gap: .6rem;
+}

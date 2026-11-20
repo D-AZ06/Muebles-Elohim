@@ -102,7 +102,7 @@
             else
             {
                 <div class="row g-4">
-                    @foreach (var producto in ProductosFiltrados)
+                    @foreach (var producto in ProductosPagina)
                     {
                         <div class="col-12 col-sm-6 col-xl-4" @key="producto.Id">
                             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
@@ -144,6 +144,28 @@
                         </div>
                     }
                 </div>
+
+                @if (TotalPaginas > 0)
+                {
+                    <nav class="d-flex justify-content-center align-items-center gap-2 gap-sm-3 mt-5" aria-label="Paginación de productos">
+                        <button type="button" class="btn btn-outline-dark rounded-pill px-3"
+                                aria-label="Página anterior"
+                                disabled="@(paginaActual == 1)"
+                                @onclick="() => IrAPagina(paginaActual - 1)">
+                            <i class="bi bi-chevron-left"></i><span class="d-none d-sm-inline ms-1">Anterior</span>
+                        </button>
+
+                        <span class="text-muted">Página <strong class="text-dark">@paginaActual</strong> de @TotalPaginas</span>
+
+                        <button type="button" class="btn btn-outline-dark rounded-pill px-3"
+                                aria-label="Página siguiente"
+                                disabled="@(paginaActual == TotalPaginas)"
+                                @onclick="() => IrAPagina(paginaActual + 1)">
+                            <span class="d-none d-sm-inline me-1">Siguiente</span><i class="bi bi-chevron-right"></i>
+                        </button>
+                    </nav>
+                }
+
             }
         </main>
     </div>
@@ -165,6 +187,16 @@
                 <img src="@productoSeleccionado.Foto"
                      alt="@productoSeleccionado.Titulo"
                      class="foto-principal" />
+
+                <button type="button"
+                        class="btn-ver-foto"
+                        aria-label="Ver imagen completa"
+                        title="Ver imagen completa"
+                        data-foto="@productoSeleccionado.Foto"
+                        data-titulo="@productoSeleccionado.Titulo"
+                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
             </div>
 
             <!-- MITAD DERECHA: Información -->
