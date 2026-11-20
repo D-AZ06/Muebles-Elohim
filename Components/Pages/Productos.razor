@@ -221,25 +221,78 @@
                     }
                 </div>
 
-                <div class="mt-auto pt-3 border-top"
-                     style="display:flex; flex-direction:row; flex-wrap:nowrap; align-items:center; gap:.5rem; flex-shrink:0;">
+                <div class="mt-auto pt-3 border-top detalle-acciones" @onclick:stopPropagation="true">
 
-                    <button type="button"
-                            class="btn btn-outline-secondary rounded-3"
-                            style="flex:0 0 44px; width:44px; height:44px; padding:0; margin:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem;"
-                            aria-label="Copiar enlace"
-                            title="Copiar enlace"
-                            @onclick="CopiarEnlace">
-                        <i class="bi @(enlaceCopiado ? "bi-check2" : "bi-link-45deg")"></i>
-                    </button>
+                  <div class="compartir-wrapper"
+                       @onmouseenter="AbrirMenuCompartir"
+                       @onmouseleave="CerrarMenuCompartir">
+                      <button type="button"
+                              class="btn btn-outline-secondary rounded-3 btn-accion-icono @(menuCompartirAbierto ? "active" : "")"
+                              aria-label="Compartir producto"
+                              aria-expanded="@menuCompartirAbierto"
+                              title="Compartir"
+                              @onclick="AlternarMenuCompartir">
+                          <i class="bi @(enlaceCopiado ? "bi-check2 text-success" : "bi-share")"></i>
+                      </button>
 
-                    <div style="flex:1 1 auto; min-width:0;">
-                        <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
-                                                Nombre="@productoSeleccionado.Titulo"
-                                                Imagen="@productoSeleccionado.Foto" />
-                    </div>
+                      @if (menuCompartirAbierto)
+                      {
+                          <div class="compartir-menu shadow-lg rounded-3 border bg-white py-1" role="menu">
+                              <button type="button"
+                                      class="compartir-item"
+                                      role="menuitem"
+                                      @onclick="CotizarPorWhatsApp">
+                                  <i class="bi bi-whatsapp text-success"></i>
+                                  <div class="text-start">
+                                      <div class="fw-semibold small text-dark">Cotizar por WhatsApp</div>
+                                      <div class="text-muted" style="font-size: .72rem;">Enviar con info del mueble</div>
+                                  </div>
+                              </button>
 
-                </div>
+                              <button type="button"
+                                      class="compartir-item"
+                                      role="menuitem"
+                                      @onclick="CopiarEnlace">
+                                  <i class="bi @(enlaceCopiado ? "bi-check2 text-success" : "bi-link-45deg")"></i>
+                                  <div class="text-start">
+                                      <div class="fw-semibold small text-dark">
+                                          @(enlaceCopiado ? "¡Enlace copiado!" : "Copiar enlace")
+                                      </div>
+                                      <div class="text-muted" style="font-size: .72rem;">Copiar URL directa</div>
+                                  </div>
+                              </button>
+
+                              <div class="dropdown-divider my-1"></div>
+
+                              <button type="button"
+                                      class="compartir-item"
+                                      role="menuitem"
+                                      @onclick="CompartirEnOtrasApps">
+                                  <i class="bi bi-box-arrow-up-right text-primary"></i>
+                                  <div class="text-start">
+                                      <div class="fw-semibold small text-dark">Compartir en otras apps</div>
+                                      <div class="text-muted" style="font-size: .72rem;">Enviar a un contacto o app</div>
+                                  </div>
+                              </button>
+                          </div>
+                      }
+                  </div>
+
+                  <div class="detalle-acciones-cotizar">
+                      <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
+                                              Nombre="@productoSeleccionado.Titulo"
+                                              Imagen="@productoSeleccionado.Foto" />
+                  </div>
+
+                    @if (enlaceCopiado)
+                    {
+                        <div class="mensaje-copiado">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Enlace copiado al portapapeles
+                        </div>
+                    }
+
+              </div>
             </div>
 
         </div>

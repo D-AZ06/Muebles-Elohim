@@ -4,6 +4,7 @@ using Muebles_Elohim.Models;
 using Muebles_Elohim.Services;
 using Supabase.Postgrest;
 using Microsoft.AspNetCore.Components.Web;
+using System.Text;
 
 namespace Muebles_Elohim.Components.Pages
 {
@@ -18,6 +19,11 @@ namespace Muebles_Elohim.Components.Pages
 
         [Inject]
         private IJSRuntime JS { get; set; } = default!;
+
+        [Inject]
+        private IConfiguration Configuracion { get; set; } = default!;
+
+        private bool menuCompartirAbierto;
 
         [Inject]
         private CatalogoServicio Catalogo { get; set; } = default!;
@@ -122,6 +128,8 @@ namespace Muebles_Elohim.Components.Pages
 
         private void CambiarProducto(int paso)
         {
+            menuCompartirAbierto = false;
+
             var lista = ProductosFiltrados;
             int i = lista.FindIndex(p => p.Id == productoSeleccionado?.Id);
             if (i < 0) return;
@@ -189,6 +197,7 @@ namespace Muebles_Elohim.Components.Pages
             productoSeleccionado = producto;
             panelAbierto = true;
             enlaceCopiado = false;
+            menuCompartirAbierto = false;
 
             Navegacion.NavigateTo("productos?id=" + producto.Id);
         }
@@ -196,6 +205,7 @@ namespace Muebles_Elohim.Components.Pages
         private void CerrarDetalle()
         {
             panelAbierto = false;
+            menuCompartirAbierto = false;
 
             if (IdProducto is not null)
             {
@@ -250,6 +260,8 @@ namespace Muebles_Elohim.Components.Pages
 
         private void SincronizarDetalleConUrl()
         {
+            menuCompartirAbierto = false;
+
             if (IdProducto is null)
             {
                 panelAbierto = false;
@@ -270,6 +282,102 @@ namespace Muebles_Elohim.Components.Pages
             enfocarModal = true;
         }
 
+        private void AlternarMenuCompartir()
+        {
+            menuCompartirAbierto = !menuCompartirAbierto;
+        }
+
+        private void AbrirMenuCompartir()
+        {
+            menuCompartirAbierto = true;
+        }
+
+        private void CerrarMenuCompartir()
+        {
+            menuCompartirAbierto = false;
+        }
+
+        private string ObtenerEnlaceProducto()
+        {
+            if (productoSeleccionado is null)
+            {
+                return Navegacion.ToAbsoluteUri("productos").ToString();
+            }
+
+            return Navegacion.ToAbsoluteUri($"productos?id={productoSeleccionado.Id}").ToString();
+        }
+
+        private async Task CotizarPorWhatsApp()
+        {
+            if (productoSeleccionado is null)
+            {
+                return;
+            }
+
+            menuCompartirAbierto = false;
+
+            // Lee "573175223193" desde secrets.json -> Contacto:WhatsApp
+            string numeroWhatsApp = Configuracion["Contacto:WhatsApp"] ?? "573175223193";
+            string numeroLimpio = new string(numeroWhatsApp.Where(char.IsDigit).ToArray());
+
+            string enlace = ObtenerEnlaceProducto();
+            var sb = new StringBuilder();
+            sb.AppendLine("Hola, me gustaría cotizar este mueble de *Muebles Elohim*:");
+            sb.AppendLine($"• *Producto:* {productoSeleccionado.Titulo}");
+
+            if (!string.IsNullOrWhiteSpace(productoSeleccionado.Categoria))
+            {
+                sb.AppendLine($"• *Categoría:* {productoSeleccionado.Categoria}");
+            }
+
+            sb.AppendLine($"• *Enlace:* {enlace}");
+
+            string mensajeCodificado = Uri.EscapeDataString(sb.ToString());
+            string urlWhatsApp = $"https://wa.me/{numeroLimpio}?text={mensajeCodificado}";
+
+            try
+            {
+                await JS.InvokeVoidAsync("window.open", urlWhatsApp, "_blank", "noopener,noreferrer");
+            }
+            catch (JSException)
+            {
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+        }
+
+        private async Task CompartirEnOtrasApps()
+        {
+            if (productoSeleccionado is null)
+            {
+                return;
+            }
+
+            menuCompartirAbierto = false;
+
+            string enlace = ObtenerEnlaceProducto();
+            string titulo = $"{productoSeleccionado.Titulo} - Muebles Elohim";
+            string texto = $"Mira este mueble de Muebles Elohim: {productoSeleccionado.Titulo}";
+
+            try
+            {
+                bool compartido = await JS.InvokeAsync<bool>("compartirProductoNativo", titulo, texto, enlace);
+
+                if (!compartido)
+                {
+                    await CopiarEnlace();
+                }
+            }
+            catch (JSException)
+            {
+                await CopiarEnlace();
+            }
+            catch (JSDisconnectedException)
+            {
+            }
+        }
+
         private async Task CopiarEnlace()
         {
             if (productoSeleccionado is null)
@@ -277,24 +385,25 @@ namespace Muebles_Elohim.Components.Pages
                 return;
             }
 
-            string enlace = Navegacion.ToAbsoluteUri("productos?id=" + productoSeleccionado.Id).ToString();
+            string enlace = ObtenerEnlaceProducto();
 
             try
             {
                 await JS.InvokeVoidAsync("navigator.clipboard.writeText", enlace);
+
                 enlaceCopiado = true;
+                menuCompartirAbierto = false;
+
                 StateHasChanged();
 
                 await Task.Delay(2000);
+
                 enlaceCopiado = false;
+
+                StateHasChanged(); // <- para ocultar el mensaje
             }
             catch (JSException)
             {
-                // El navegador no permitió copiar
-            }
-            catch (JSDisconnectedException)
-            {
-                // El circuito se cerró
             }
         }
     }

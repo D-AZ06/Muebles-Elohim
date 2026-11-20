@@ -319,3 +319,81 @@
     .btn-ver-foto:hover {
         background: rgba(0, 0, 0, .7);
     }
+
+
+.compartir-wrapper {
+    position: relative;
+    flex: 0 0 44px;
+    overflow: visible;
+}
+
+.compartir-menu {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 8px);
+    width: 240px;
+    z-index: 1080;
+}
+
+.compartir-item {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    padding: .55rem .75rem;
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    cursor: pointer;
+    transition: background-color .15s ease;
+}
+
+    .compartir-item:hover {
+        background-color: #f8f9fa;
+    }
+
+    .compartir-item i {
+        font-size: 1.15rem;
+        flex-shrink: 0;
+    }
+
+@media (max-width: 767.98px) {
+
+    .compartir-menu {
+        position: fixed;
+        left: calc(50% - 47vw + 16px);
+        bottom: 90px;
+        width: 240px;
+        z-index: 3000;
+        transform: none;
+    }
+}
+
+.mensaje-copiado {
+    position: absolute;
+    left: 50%;
+    bottom: 70px;
+    transform: translateX(-50%);
+    background: #198754;
+    color: white;
+    padding: .6rem 1rem;
+    border-radius: .75rem;
+    font-size: .85rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    z-index: 4000;
+    animation: aparecerToast .25s ease;
+}
+
+@keyframes aparecerToast {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
