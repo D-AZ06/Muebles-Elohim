@@ -4,6 +4,9 @@
 
 @if (!Oculto)
 {
+    <div class="floating-spacer" aria-hidden="true"></div>
+    <div id="floatingSentinel"></div>
+
     <div class="floating-wrapper @(EsInicio ? "doble" : "")">
         <div class="floating-btn-container">
             @if (EsInicio)
@@ -24,8 +27,6 @@
             }
         </div>
     </div>
-    <div class="floating-spacer" aria-hidden="true"></div>
-    <div id="floatingSentinel"></div>
 }
 
 @code {

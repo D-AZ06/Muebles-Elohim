@@ -75,30 +75,6 @@
 	</div>
 </footer>
 
-<script>
-        window.addEventListener('scroll', () => {
-
-        const header = document.getElementById('mainHeader');
-
-        if (!header)
-            return;
-
-        const rect = header.getBoundingClientRect();
-
-        if (rect.bottom <= 70) {
-
-            document.body.classList.add('scrolled');
-
-        } else {
-
-            document.body.classList.remove('scrolled');
-
-        }
-
-    });
-</script>
-
-
 @code {
     private bool scrollPendiente = false;
     private string rutaAnterior = "";

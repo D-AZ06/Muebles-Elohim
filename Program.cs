@@ -3,6 +3,8 @@ using Muebles_Elohim.Models;
 using Supabase;
 using Muebles_Elohim.Services;
 using System.Text;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace Muebles_Elohim
 {
@@ -44,7 +46,33 @@ namespace Muebles_Elohim
             );
             // ==========================================
 
+            // Detrás de un proxy (hosting) la IP real viene en X-Forwarded-For
+            builder.Services.Configure<ForwardedHeadersOptions>(o =>
+            {
+                o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                o.KnownNetworks.Clear();
+                o.KnownProxies.Clear();
+            });
+
+            // Límite de peticiones HTTP por IP (los archivos estáticos no cuentan)
+            builder.Services.AddRateLimiter(o =>
+            {
+                o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                o.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(ctx =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        ctx.Connection.RemoteIpAddress?.ToString() ?? "desconocida",
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 200,
+                            Window = TimeSpan.FromMinutes(1),
+                            QueueLimit = 0
+                        }));
+            });
+
             var app = builder.Build();
+
+            app.UseForwardedHeaders();
+
 
             var supabase = app.Services.GetRequiredService<Supabase.Client>();
             try
@@ -97,7 +125,34 @@ namespace Muebles_Elohim
 
             app.UseHttpsRedirection();
 
+            // Encabezados de seguridad
+            app.Use(async (ctx, next) =>
+            {
+                var h = ctx.Response.Headers;
+                h["X-Content-Type-Options"] = "nosniff";
+                h["X-Frame-Options"] = "DENY";
+                h["Referrer-Policy"] = "strict-origin-when-cross-origin";
+                h["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+
+                // En desarrollo no se aplica para no romper el hot reload
+                if (!app.Environment.IsDevelopment())
+                {
+                    h["Content-Security-Policy"] =
+                        "default-src 'self'; " +
+                        "script-src 'self' https://cdn.jsdelivr.net; " +
+                        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; " +
+                        "font-src 'self' https://cdn.jsdelivr.net; " +
+                        "img-src 'self' data: https:; " +
+                        "connect-src 'self' wss:; " +
+                        "object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'";
+                }
+
+                await next();
+            });
+
             app.UseStaticFiles();
+            app.UseRateLimiter();
+
             app.UseAntiforgery();
 
             app.MapRazorComponents<App>()

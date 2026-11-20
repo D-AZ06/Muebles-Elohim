@@ -1,51 +1,36 @@
 ﻿(function () {
-    const root = document.documentElement;
-
-    function updateFooterLift() {
-        const footer = document.querySelector('footer.footer');
-        let lift = 0;
-
-        if (footer) {
-            const overlap = root.clientHeight - footer.getBoundingClientRect().top;
-            lift = Math.max(0, Math.round(overlap));
-        }
-
-        root.style.setProperty('--footer-lift', lift + 'px');
-    }
-
+    let ultimoY = window.scrollY;
     let pendiente = false;
-    function updateFooterLiftSoon() {
-        if (pendiente) return;
-        pendiente = true;
-        requestAnimationFrame(() => {
-            pendiente = false;
-            updateFooterLift();
-        });
-    }
 
-    function initFloatingBtn() {
+    function revisar() {
+        pendiente = false;
         const sentinel = document.getElementById('floatingSentinel');
         const btn = document.querySelector('.floating-btn-container');
-        if (!sentinel || !btn || sentinel._observed) return;
-        sentinel._observed = true;
+        if (!sentinel || !btn) return;
 
-        new IntersectionObserver(([entry]) => {
-            btn.classList.toggle('at-bottom', entry.isIntersecting);
-        }, { rootMargin: '0px 0px -30px 0px' }).observe(sentinel);
+        const y = window.scrollY;
+        const dist = sentinel.getBoundingClientRect().top - window.innerHeight;
+
+        if (dist > 40) {
+            btn.classList.remove('at-bottom');
+        } else if (y > ultimoY) {
+            btn.classList.add('at-bottom');          // bajando: expande 40px antes
+        } else if (y < ultimoY) {
+            if (dist > -26) btn.classList.remove('at-bottom');  // subiendo: colapsa
+        } else {
+            btn.classList.toggle('at-bottom', dist <= 0);
+        }
+        ultimoY = y;
     }
 
-    window.addEventListener('scroll', updateFooterLift, { passive: true });
-    window.addEventListener('resize', updateFooterLiftSoon);
-
-    if ('ResizeObserver' in window) {
-        new ResizeObserver(updateFooterLiftSoon).observe(document.body);
+    function pedirRevision() {
+        if (pendiente) return;
+        pendiente = true;
+        requestAnimationFrame(revisar);
     }
 
-    new MutationObserver(() => {
-        initFloatingBtn();
-        updateFooterLiftSoon();
-    }).observe(document.body, { childList: true, subtree: true });
-
-    initFloatingBtn();
-    updateFooterLift();
+    window.addEventListener('scroll', pedirRevision, { passive: true });
+    window.addEventListener('resize', pedirRevision);
+    new MutationObserver(pedirRevision).observe(document.body, { childList: true, subtree: true });
+    pedirRevision();
 })();

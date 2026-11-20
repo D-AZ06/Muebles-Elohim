@@ -1,15 +1,14 @@
 ﻿.floating-wrapper {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: calc(25px + var(--footer-lift, 0px));
+    position: sticky;
+    bottom: 25px;
+    margin: 0 -1.5rem 9px;
     height: 0;
     z-index: 1000;
     pointer-events: none;
 }
 
 .floating-spacer {
-    height: 100px;
+    height: 30px;
 }
 
 #floatingSentinel {
