@@ -147,7 +147,12 @@
     height: 100%;
     background: #ffffff;
     width: 0%;
+}
+
+/* La duración (4000ms) debe coincidir con INTERVALO de carrusel.js */
+.dot-item.active .dot-progress {
     animation-name: capsuleFill;
+    animation-duration: 4000ms;
     animation-timing-function: linear;
     animation-fill-mode: forwards;
 }

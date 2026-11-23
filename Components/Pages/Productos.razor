@@ -72,6 +72,14 @@
                 }
             </div>
 
+            @if (productoNoDisponible)
+            {
+                <div class="alert alert-warning d-flex justify-content-between align-items-center gap-2" role="alert">
+                    <span>Ese producto ya no está disponible. Mira el resto de nuestro catálogo.</span>
+                    <a href="/productos" class="btn btn-sm btn-outline-dark text-nowrap">Ver catálogo</a>
+                </div>
+            }
+
             @if (cargando)
             {
                 <div class="text-center py-5">
@@ -284,13 +292,13 @@
                                               Imagen="@productoSeleccionado.Foto" />
                   </div>
 
-                    @if (enlaceCopiado)
-                    {
-                        <div class="mensaje-copiado">
-                            <i class="bi bi-check-circle-fill"></i>
-                            Enlace copiado al portapapeles
-                        </div>
-                    }
+                  @if (enlaceCopiado)
+{
+    <div class="mensaje-copiado">
+        <i class="bi bi-check-circle-fill"></i>
+        Enlace copiado al portapapeles
+    </div>
+}
 
               </div>
             </div>

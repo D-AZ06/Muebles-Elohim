@@ -10,10 +10,11 @@ namespace Muebles_Elohim.Services
     {
         private const string LlaveStorage = "muebles_elohim_cotizacion";
         private const int CantidadMaxima = 99;
+        public const int MaxProductos = 20;
 
         private readonly IJSRuntime _js;
         private readonly List<ItemCotizacion> _items = new List<ItemCotizacion>();
-        private bool _cargando = false;
+        private Task? _tareaCarga;
         private bool _cargado = false;
 
         // Los componentes se suscriben para redibujarse cuando la lista cambia
@@ -67,17 +68,75 @@ namespace Muebles_Elohim.Services
 
             return 0;
         }
+        // Coteja la lista guardada con el catálogo actual:
+        // quita productos que ya no existen y actualiza nombre y foto. Devuelve cuántos quitó.
+        public async Task<int> SincronizarConCatalogoAsync(IEnumerable<CatalogoFoto> catalogo)
+        {
+            Dictionary<string, CatalogoFoto> porId = catalogo
+                .GroupBy(p => p.Id.ToString())
+                .ToDictionary(g => g.Key, g => g.First());
+
+            // Sin catálogo no se puede saber qué existe: la lista no se toca
+            if (porId.Count == 0)
+            {
+                return 0;
+            }
+
+            int quitados = 0;
+            bool hayCambios = false;
+
+            foreach (ItemCotizacion item in _items.ToList())
+            {
+                if (!porId.TryGetValue(item.ProductoId, out CatalogoFoto? actual))
+                {
+                    _items.Remove(item);
+                    quitados++;
+                    hayCambios = true;
+                }
+                else if (item.Nombre != actual.Titulo || item.Imagen != actual.Foto)
+                {
+                    item.Nombre = actual.Titulo;
+                    item.Imagen = actual.Foto;
+                    hayCambios = true;
+                }
+            }
+
+            if (hayCambios)
+            {
+                await GuardarAsync();
+            }
+
+            return quitados;
+        }
 
         // Se llama desde OnAfterRenderAsync (antes no hay JavaScript disponible)
         public async Task InicializarAsync()
         {
-            if (_cargado || _cargando)
+            if (_cargado)
             {
                 return;
             }
 
-            _cargando = true;
+            if (_tareaCarga != null)
+            {
+                await _tareaCarga;
+                return;
+            }
 
+            _tareaCarga = CargarDesdeStorageAsync();
+
+            try
+            {
+                await _tareaCarga;
+            }
+            finally
+            {
+                _tareaCarga = null;
+            }
+        }
+
+        private async Task CargarDesdeStorageAsync()
+        {
             try
             {
                 string? json;
@@ -116,15 +175,12 @@ namespace Muebles_Elohim.Services
             {
                 // El circuito se cerró: no hay nada que hacer
             }
-            finally
-            {
-                _cargando = false;
-            }
 
             OnChange?.Invoke();
         }
 
-        public async Task AgregarAsync(string productoId, string nombre, string imagen)
+        // Devuelve false si la lista ya está llena y no se pudo agregar
+        public async Task<bool> AgregarAsync(string productoId, string nombre, string imagen)
         {
             ItemCotizacion? existente;
             existente = null;
@@ -146,6 +202,11 @@ namespace Muebles_Elohim.Services
             }
             else
             {
+                if (_items.Count >= MaxProductos)
+                {
+                    return false;
+                }
+
                 ItemCotizacion nuevo = new ItemCotizacion();
                 nuevo.ProductoId = productoId;
                 nuevo.Nombre = nombre;
@@ -155,6 +216,7 @@ namespace Muebles_Elohim.Services
             }
 
             await GuardarAsync();
+            return true;
         }
 
         public async Task CambiarCantidadAsync(string productoId, int cantidad)

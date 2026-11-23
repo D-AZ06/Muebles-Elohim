@@ -24,7 +24,7 @@
 
             @for (int i = 0; i < slides.Length; i++)
             {
-                <div class="slide-item @(currentIndex == i ? "active" : "")">
+                <div class="slide-item @(i == 0 ? "active" : "")">
 
                     <div class="slide-bg-blur"
                          style="background-image:url('@slides[i].ImageUrl')">
@@ -32,7 +32,10 @@
 
                     <div class="slide-img-wrapper">
                         <img src="@slides[i].ImageUrl"
-                             alt="@slides[i].Title" />
+                             alt="@slides[i].Title"
+                             loading="@(i == 0 ? "eager" : "lazy")"
+                             fetchpriority="@(i == 0 ? "high" : "low")"
+                             decoding="async" />
                     </div>
 
                     <div class="slide-caption">
@@ -49,19 +52,8 @@
 
             @for (int j = 0; j < slides.Length; j++)
             {
-                var targetIndex = j;
-
-                <div class="dot-item @(currentIndex == targetIndex ? "active" : "")"
-                     @onclick="() => SeleccionarSlide(targetIndex)">
-
-                    @if (currentIndex == targetIndex)
-                    {
-                        <div class="dot-progress"
-                             @key="currentIndex"
-                             style="animation-duration:@(slideInterval)ms">
-                        </div>
-                    }
-
+                <div class="dot-item @(j == 0 ? "active" : "")">
+                    <div class="dot-progress"></div>
                 </div>
             }
 

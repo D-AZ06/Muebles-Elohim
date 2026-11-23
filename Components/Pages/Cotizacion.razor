@@ -12,6 +12,15 @@
     </p>
 }
 
+@if (quitadosPorCatalogo > 0)
+{
+    <p class="ayuda">
+        @(quitadosPorCatalogo == 1
+            ? "Un producto de tu lista ya no está disponible y se quitó."
+            : $"{quitadosPorCatalogo} productos de tu lista ya no están disponibles y se quitaron.")
+</p>
+}
+
 <section class="cotizacion">
     <h1>Mi lista de cotización</h1>
 

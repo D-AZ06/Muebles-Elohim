@@ -11,6 +11,9 @@ namespace Muebles_Elohim.Services
         private readonly ContactoOpciones _contacto;
         private readonly NavigationManager _navegacion;
 
+        // Si el enlace pasa de este largo, algunos navegadores lo cortan
+        private const int LargoMaximoUrl = 2000;
+
         public CotizacionServicio(IOptions<ContactoOpciones> contacto, NavigationManager navegacion)
         {
             _contacto = contacto.Value;
@@ -35,6 +38,19 @@ namespace Muebles_Elohim.Services
         {
             string numero = SoloDigitos(_contacto.WhatsApp);
 
+            string url = ArmarUrl(numero, solicitud, items, true);
+
+            // Con muchos productos se quitan los enlaces para que el mensaje no se corte
+            if (url.Length > LargoMaximoUrl)
+            {
+                url = ArmarUrl(numero, solicitud, items, false);
+            }
+
+            return url;
+        }
+
+        private string ArmarUrl(string numero, SolicitudCotizacion solicitud, IReadOnlyList<ItemCotizacion> items, bool conEnlaces)
+        {
             StringBuilder texto = new StringBuilder();
             texto.AppendLine("Cotización " + solicitud.Codigo);
             texto.AppendLine("Hola, soy " + solicitud.Nombre.Trim() + " (" + solicitud.Telefono.Trim() + ").");
@@ -42,7 +58,18 @@ namespace Muebles_Elohim.Services
 
             foreach (ItemCotizacion item in items)
             {
-                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + EnlaceProducto(item.ProductoId));
+                string referencia;
+
+                if (conEnlaces)
+                {
+                    referencia = EnlaceProducto(item.ProductoId);
+                }
+                else
+                {
+                    referencia = "ref. " + item.ProductoId;
+                }
+
+                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + referencia);
             }
 
             return "https://wa.me/" + numero + "?text=" + Uri.EscapeDataString(texto.ToString());

@@ -9,6 +9,14 @@
 else
 {
     <button type="button" class="btn-cotizar" @onclick="Agregar">Agregar a cotización</button>
+
+    @if (listaLlena)
+    {
+        <small class="text-danger d-block mt-1">
+            Tu lista está llena (máximo @Services.ListaCotizacionServicio.MaxProductos productos).
+            Envía esta cotización y luego arma otra.
+        </small>
+    }
 }
 
 @code {
@@ -31,9 +39,12 @@ else
         InvokeAsync(StateHasChanged);
     }
 
+    private bool listaLlena;
+
     private async Task Agregar()
     {
-        await Lista.AgregarAsync(ProductoId, Nombre, Imagen);
+        bool agregado = await Lista.AgregarAsync(ProductoId, Nombre, Imagen);
+        listaLlena = !agregado;
     }
 
     public void Dispose()

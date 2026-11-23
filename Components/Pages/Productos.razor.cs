@@ -26,6 +26,9 @@ namespace Muebles_Elohim.Components.Pages
         private bool menuCompartirAbierto;
 
         [Inject]
+        private ILogger<Productos> Logger { get; set; } = default!;
+
+        [Inject]
         private CatalogoServicio Catalogo { get; set; } = default!;
 
         // Id que viene en la URL: /productos?id=12
@@ -36,6 +39,8 @@ namespace Muebles_Elohim.Components.Pages
 
         private ElementReference modalRef;
         private bool enfocarModal;
+
+        private bool productoNoDisponible;
 
         private string TituloPagina
         {
@@ -171,7 +176,11 @@ namespace Muebles_Elohim.Components.Pages
             }
             catch (Exception ex)
             {
-                mensajeError = "No se pudieron cargar los productos: " + ex.Message;
+                // El detalle técnico queda solo en el log del servidor
+                Logger.LogError(ex, "Error al cargar el catálogo de productos");
+
+                mensajeError = "No pudimos cargar los productos en este momento. " +
+                               "Por favor intenta de nuevo en unos minutos.";
             }
             finally
             {
@@ -261,6 +270,7 @@ namespace Muebles_Elohim.Components.Pages
         private void SincronizarDetalleConUrl()
         {
             menuCompartirAbierto = false;
+            productoNoDisponible = false;
 
             if (IdProducto is null)
             {
@@ -273,6 +283,9 @@ namespace Muebles_Elohim.Components.Pages
             if (encontrado is null)
             {
                 panelAbierto = false;
+
+                // Solo se avisa si el catálogo cargó bien (si falló, ya sale otro mensaje)
+                productoNoDisponible = !cargando && string.IsNullOrEmpty(mensajeError) && productos.Count > 0;
                 return;
             }
 

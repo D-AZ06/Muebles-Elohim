@@ -20,6 +20,14 @@ namespace Muebles_Elohim.Components.Pages
 
         private SolicitudCotizacion _solicitud = new SolicitudCotizacion();
 
+        [Inject]
+        private CatalogoServicio Catalogo { get; set; } = default!;
+
+        private int quitadosPorCatalogo;
+
+        [Inject]
+        private ILogger<Cotizacion> Logger { get; set; } = default!;
+
         protected override void OnInitialized()
         {
             Lista.OnChange += Refrescar;
@@ -30,6 +38,27 @@ namespace Muebles_Elohim.Components.Pages
             if (firstRender)
             {
                 await Lista.InicializarAsync();
+
+                try
+                {
+                    List<CatalogoFoto> catalogo = await Catalogo.ObtenerAsync();
+
+                    Logger.LogInformation("Cotejo: {Items} en la lista, {Catalogo} en el catálogo",
+                        Lista.Items.Count, catalogo.Count);
+
+                    quitadosPorCatalogo = await Lista.SincronizarConCatalogoAsync(catalogo);
+
+                    Logger.LogInformation("Cotejo: {Quitados} quitados", quitadosPorCatalogo);
+
+                    if (quitadosPorCatalogo > 0)
+                    {
+                        StateHasChanged();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Error al cotejar la lista con el catálogo");
+                }
             }
         }
 

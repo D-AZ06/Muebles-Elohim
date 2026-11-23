@@ -1,18 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
+﻿namespace Muebles_Elohim.Components.Pages;
 
-namespace Muebles_Elohim.Components.Pages;
-
-public partial class Home : ComponentBase, IDisposable
+public partial class Home
 {
-    [Inject]
-    private IJSRuntime JS { get; set; } = default!;
-
-    private int currentIndex = 0;
-    private int slideInterval = 4000;
-
-    private CancellationTokenSource? cts;
-
     private class SlideInfo
     {
         public string ImageUrl { get; set; } = "";
@@ -43,52 +32,4 @@ public partial class Home : ComponentBase, IDisposable
             Description="Clósets y muebles a medida que combinan la máxima organización con un estilo elegante."
         }
     };
-
-    protected override async Task OnInitializedAsync()
-    {
-        cts = new CancellationTokenSource();
-
-        _ = IniciarCicloAutomatico(cts.Token);
-
-        await Task.CompletedTask;
-    }
-
-    private async Task IniciarCicloAutomatico(
-        CancellationToken token)
-    {
-        try
-        {
-            while (!token.IsCancellationRequested)
-            {
-                await Task.Delay(slideInterval, token);
-
-                currentIndex =
-                    (currentIndex + 1) % slides.Length;
-
-                await InvokeAsync(StateHasChanged);
-            }
-        }
-        catch (TaskCanceledException)
-        {
-        }
-    }
-
-    private void SeleccionarSlide(int index)
-    {
-        currentIndex = index;
-
-        cts?.Cancel();
-
-        cts = new CancellationTokenSource();
-
-        _ = IniciarCicloAutomatico(cts.Token);
-
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        cts?.Cancel();
-        cts?.Dispose();
-    }
 }
