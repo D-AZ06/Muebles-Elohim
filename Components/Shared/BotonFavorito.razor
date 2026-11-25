@@ -1,0 +1,52 @@
+@implements IDisposable
+@inject Muebles_Elohim.Services.FavoritosServicio Favoritos
+
+<button type="button"
+        class="btn-favorito @(EsFavorito ? "activo" : "")"
+        aria-label="@(EsFavorito ? "Quitar de favoritos" : "Guardar en favoritos")"
+        aria-pressed="@(EsFavorito ? "true" : "false")"
+        title="@(EsFavorito ? "Quitar de favoritos" : "Guardar en favoritos")"
+        @onclick="Alternar">
+    <i class="bi @(EsFavorito ? "bi-heart-fill" : "bi-heart")"></i>
+</button>
+
+@code {
+    [Parameter, EditorRequired]
+    public string ProductoId { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public string Nombre { get; set; } = string.Empty;
+
+    [Parameter]
+    public string Imagen { get; set; } = string.Empty;
+
+    private bool EsFavorito => Favoritos.Contiene(ProductoId);
+
+    protected override void OnInitialized()
+    {
+        Favoritos.OnChange += Refrescar;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Favoritos.InicializarAsync();
+        }
+    }
+
+    private async Task Alternar()
+    {
+        await Favoritos.AlternarAsync(ProductoId, Nombre, Imagen);
+    }
+
+    private void Refrescar()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Favoritos.OnChange -= Refrescar;
+    }
+}

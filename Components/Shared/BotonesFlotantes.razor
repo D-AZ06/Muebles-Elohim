@@ -1,28 +1,39 @@
 ﻿@implements IDisposable
 @inject NavigationManager Navegacion
 @inject Microsoft.Extensions.Options.IOptions<ContactoOpciones> Contacto
+@inject Muebles_Elohim.Services.ListaCotizacionServicio Lista
 
 @if (!Oculto)
 {
-    <div class="floating-spacer" aria-hidden="true"></div>
+    <div class="floating-spacer @(Cantidad == 3 ? "alto" : "")" aria-hidden="true"></div>
     <div id="floatingSentinel"></div>
 
-    <div class="floating-wrapper @(EsInicio ? "doble" : "")">
+    <div class="floating-wrapper @ClaseCantidad">
         <div class="floating-btn-container">
             @if (EsInicio)
             {
-                <a href="productos" class="btn btn-productos">
+                <a href="productos" class="btn btn-productos p0">
                     <i class="bi bi-shop"></i>
                     <span class="btn-text">Ver Productos</span>
                 </a>
             }
 
-            @if (!string.IsNullOrEmpty(urlWhatsApp))
+            @if (HayWhatsApp)
             {
                 <a href="@urlWhatsApp" target="_blank" rel="noopener"
-                   class="btn btn-whatsapp-flotante" aria-label="Escribir por WhatsApp">
+                   class="btn btn-whatsapp-flotante @("p" + PosWhatsApp)" aria-label="Escribir por WhatsApp">
                     <i class="bi bi-whatsapp"></i>
                     <span class="btn-text">WhatsApp</span>
+                </a>
+            }
+
+            @if (HayCotizar)
+            {
+                int total = Lista.TotalUnidades();
+                <a href="cotizacion" class="btn btn-cotizar-flotante @("p" + PosCotizar)" aria-label="Ver mi cotización">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span class="btn-text">Cotizar</span>
+                    <span class="cotizar-badge">@(total > 99 ? "99+" : total.ToString())</span>
                 </a>
             }
         </div>
@@ -38,9 +49,19 @@
     private bool EsInicio => Ruta == "";
     private bool Oculto => Ruta == "contacto" || Ruta == "cotizacion";
 
+    private bool HayWhatsApp => !string.IsNullOrEmpty(urlWhatsApp);
+    private bool HayCotizar => Lista.Items.Count > 0;
+
+    private int Cantidad => (EsInicio ? 1 : 0) + (HayWhatsApp ? 1 : 0) + (HayCotizar ? 1 : 0);
+    private string ClaseCantidad => Cantidad == 3 ? "triple" : Cantidad == 2 ? "doble" : "";
+
+    private int PosWhatsApp => EsInicio ? 1 : 0;
+    private int PosCotizar => (EsInicio ? 1 : 0) + (HayWhatsApp ? 1 : 0);
+
     protected override void OnInitialized()
     {
         Navegacion.LocationChanged += AlCambiarPagina;
+        Lista.OnChange += Refrescar;
 
         string numero = new string(Contacto.Value.WhatsApp.Where(char.IsDigit).ToArray());
 
@@ -51,7 +72,20 @@
         }
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Lista.InicializarAsync();
+        }
+    }
+
     private void AlCambiarPagina(object? sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void Refrescar()
     {
         InvokeAsync(StateHasChanged);
     }
@@ -59,5 +93,6 @@
     public void Dispose()
     {
         Navegacion.LocationChanged -= AlCambiarPagina;
+        Lista.OnChange -= Refrescar;
     }
 }

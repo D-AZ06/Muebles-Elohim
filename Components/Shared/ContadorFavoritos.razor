@@ -1,0 +1,36 @@
+@implements IDisposable
+@inject Muebles_Elohim.Services.FavoritosServicio Favoritos
+@rendermode InteractiveServer
+
+<a class="text-decoration-none text-secondary px-2 contador-cotizacion" href="/favoritos">
+    <i class="bi bi-heart"></i> Favoritos
+    @if (Favoritos.Items.Count > 0)
+    {
+        <span class="insignia">@Favoritos.Items.Count</span>
+    }
+</a>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Favoritos.OnChange += Refrescar;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Favoritos.InicializarAsync();
+        }
+    }
+
+    private void Refrescar()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Favoritos.OnChange -= Refrescar;
+    }
+}

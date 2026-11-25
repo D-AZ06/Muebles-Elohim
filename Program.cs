@@ -22,6 +22,7 @@ namespace Muebles_Elohim
             builder.Configuration.GetSection(ContactoOpciones.Seccion));
 
             builder.Services.AddScoped<ListaCotizacionServicio>();
+            builder.Services.AddScoped<FavoritosServicio>();
             builder.Services.AddScoped<CotizacionServicio>();
 
             builder.Services.AddMemoryCache();
@@ -29,7 +30,7 @@ namespace Muebles_Elohim
 
 
             // ==========================================
-            // Configuración de Supabase
+            // Configuraciï¿½n de Supabase
             // ==========================================
             var supabaseUrl = builder.Configuration["Supabase:Url"]
                 ?? throw new InvalidOperationException("Falta Supabase:Url");
@@ -46,7 +47,7 @@ namespace Muebles_Elohim
             );
             // ==========================================
 
-            // Detrás de un proxy (hosting) la IP real viene en X-Forwarded-For
+            // Detrï¿½s de un proxy (hosting) la IP real viene en X-Forwarded-For
             builder.Services.Configure<ForwardedHeadersOptions>(o =>
             {
                 o.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
@@ -54,7 +55,7 @@ namespace Muebles_Elohim
                 o.KnownProxies.Clear();
             });
 
-            // Límite de peticiones HTTP por IP (los archivos estáticos no cuentan)
+            // Lï¿½mite de peticiones HTTP por IP (los archivos estï¿½ticos no cuentan)
             builder.Services.AddRateLimiter(o =>
             {
                 o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;

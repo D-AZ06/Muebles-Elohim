@@ -114,11 +114,19 @@
                     {
                         <div class="col-12 col-sm-6 col-xl-4" @key="producto.Id">
                             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                                <img src="@producto.Foto"
-                                     alt="@producto.Titulo"
-                                     class="card-img-top"
-                                     loading="lazy"
-                                     style="height: 230px; object-fit: cover;" />
+                                <div class="position-relative">
+                                    <img src="@producto.Foto"
+                                        alt="@producto.Titulo"
+                                        class="card-img-top"
+                                        loading="lazy"
+                                        style="height: 230px; object-fit: cover;" />
+
+                                    <div class="favorito-esquina">
+                                        <BotonFavorito ProductoId="@producto.Id.ToString()"
+                                                    Nombre="@producto.Titulo"
+                                                    Imagen="@producto.Foto" />
+                                    </div>
+                                </div>
 
                                 <div class="card-body d-flex flex-column">
                                     <span class="badge bg-light text-primary border align-self-start mb-2">
@@ -195,6 +203,12 @@
                 <img src="@productoSeleccionado.Foto"
                      alt="@productoSeleccionado.Titulo"
                      class="foto-principal" />
+
+                <div class="favorito-modal">
+                    <BotonFavorito ProductoId="@productoSeleccionado.Id.ToString()"
+                                Nombre="@productoSeleccionado.Titulo"
+                                Imagen="@productoSeleccionado.Foto" />
+                </div>
 
                 <button type="button"
                         class="btn-ver-foto"
@@ -293,12 +307,12 @@
                   </div>
 
                   @if (enlaceCopiado)
-{
-    <div class="mensaje-copiado">
-        <i class="bi bi-check-circle-fill"></i>
-        Enlace copiado al portapapeles
-    </div>
-}
+                    {
+                        <div class="mensaje-copiado">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Enlace copiado al portapapeles
+                        </div>
+                    }
 
               </div>
             </div>

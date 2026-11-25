@@ -1,0 +1,94 @@
+@page "/favoritos"
+@rendermode InteractiveServer
+@implements IDisposable
+@using Muebles_Elohim.Components.Shared
+@using Muebles_Elohim.Models
+@using Muebles_Elohim.Services
+@inject FavoritosServicio Servicio
+@inject CatalogoServicio Catalogo
+
+<PageTitle>Mis favoritos | Muebles Elohim</PageTitle>
+
+<section class="favoritos">
+    <h1>Mis favoritos</h1>
+
+    @if (quitadosPorCatalogo > 0)
+    {
+        <p class="ayuda">
+            @(quitadosPorCatalogo == 1
+                ? "Un producto de tus favoritos ya no está disponible y se quitó."
+                : $"{quitadosPorCatalogo} productos de tus favoritos ya no están disponibles y se quitaron.")
+        </p>
+    }
+
+    @if (Servicio.Items.Count == 0)
+    {
+        <p>Aún no tienes favoritos. Toca el corazón en los productos que te gusten para guardarlos aquí.</p>
+        <a class="btn-ir" href="/productos">Ver productos</a>
+    }
+    else
+    {
+        <ul class="items">
+            @foreach (ItemFavorito item in Servicio.Items)
+            {
+                <li class="item" @key="item.ProductoId">
+                    @if (!string.IsNullOrEmpty(item.Imagen))
+                    {
+                        <img src="@item.Imagen" alt="@item.Nombre" />
+                    }
+                    <a class="nombre" href="/productos?id=@item.ProductoId">@item.Nombre</a>
+                    <div class="acciones">
+                        <BotonAgregarCotizacion ProductoId="@item.ProductoId"
+                                                Nombre="@item.Nombre"
+                                                Imagen="@item.Imagen" />
+                        <button type="button" class="quitar" @onclick="() => Servicio.QuitarAsync(item.ProductoId)">
+                            Quitar
+                        </button>
+                    </div>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+@code {
+    private int quitadosPorCatalogo;
+
+    protected override void OnInitialized()
+    {
+        Servicio.OnChange += Refrescar;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Servicio.InicializarAsync();
+
+            try
+            {
+                List<CatalogoFoto> catalogo = await Catalogo.ObtenerAsync();
+                quitadosPorCatalogo = await Servicio.SincronizarConCatalogoAsync(catalogo);
+
+                if (quitadosPorCatalogo > 0)
+                {
+                    StateHasChanged();
+                }
+            }
+            catch (Exception)
+            {
+                // Sin catálogo no se cotejan los favoritos
+            }
+        }
+    }
+
+    private void Refrescar()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Servicio.OnChange -= Refrescar;
+    }
+}
