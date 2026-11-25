@@ -1,6 +1,7 @@
 ﻿@page "/cotizacion"
 @rendermode InteractiveServer
 @using Muebles_Elohim.Models
+@using Muebles_Elohim.Components.Shared
 
 <PageTitle>Mi cotización | Muebles Elohim</PageTitle>
 
@@ -22,15 +23,17 @@
 }
 
 <section class="cotizacion">
-    <h1>Mi lista de cotización</h1>
 
     @if (Lista.Items.Count == 0)
     {
-        <p>Tu lista está vacía. Agrega los muebles que te interesen para cotizarlos.</p>
-        <a class="btn-whatsapp" href="/productos">Ver productos</a>
+        <EstadoVacio Icono="bi-card-checklist"
+                     Titulo="Tu lista de cotización está vacía"
+                     Mensaje="Agrega los muebles que te interesen y envía tu cotización por WhatsApp en un par de toques." />
     }
     else
     {
+        <h1>Mi lista de cotización</h1>
+
         <ul class="items">
             @foreach (ItemCotizacion item in Lista.Items)
             {

@@ -2,8 +2,9 @@
 @inject Muebles_Elohim.Services.FavoritosServicio Favoritos
 @rendermode InteractiveServer
 
-<a class="text-decoration-none text-secondary px-2 contador-cotizacion" href="/favoritos">
-    <i class="bi bi-heart"></i> Favoritos
+<a class="text-decoration-none text-secondary px-2 contador-cotizacion"
+   href="/favoritos" aria-label="Favoritos" title="Favoritos">
+    <i class="bi bi-heart"></i> <span class="nav-texto">Favoritos</span>
     @if (Favoritos.Items.Count > 0)
     {
         <span class="insignia">@Favoritos.Items.Count</span>

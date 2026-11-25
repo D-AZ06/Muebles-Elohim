@@ -50,7 +50,7 @@ h1:focus {
     border-color: #929292;
 }
 
-/* ===== MEN⁄ M”VIL: que quepa en pantallas angostas ===== */
+/* ===== MENÔøΩ MÔøΩVIL: que quepa en pantallas angostas ===== */
 @media (max-width: 768px) {
     .top-row nav {
         gap: .15rem !important;
@@ -182,4 +182,66 @@ html, body {
     transform: translateX(-50%);
     display: flex;
     gap: .6rem;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* .page {
+    flex: 1 0 auto;
+} */
+
+footer.footer {
+    flex-shrink: 0;
+}
+
+/* El documento mide al menos pantalla + header, para poder dejar el header
+   grande escondido aunque la pagina tenga poco contenido */
+:root {
+    --alto-header: 280px;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --alto-header: 180px;
+    }
+}
+
+body {
+    min-height: calc(100vh + var(--alto-header));
+    min-height: calc(100dvh + var(--alto-header));
+    display: flex;
+    flex-direction: column;
+}
+
+.page {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+    .page > main {
+        flex: 1;
+    }
+
+/* ===== ICONOS DEL MENU ===== */
+.top-row nav a .bi {
+    font-size: 1.1rem;
+    vertical-align: -0.12em;
+}
+
+/* En pantallas muy angostas, Inicio/Productos/Favoritos quedan solo con icono
+   para que el menu no se desborde. "Cont√°ctanos" conserva el texto. */
+@media (max-width: 480px) {
+    .top-row nav .nav-texto {
+        display: none;
+    }
+
+    .top-row nav a .bi {
+        font-size: 1.3rem;
+    }
 }

@@ -112,14 +112,28 @@
                 <div class="row g-4">
                     @foreach (var producto in ProductosPagina)
                     {
-                        <div class="col-12 col-sm-6 col-xl-4" @key="producto.Id">
-                            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
-                                <div class="position-relative">
-                                    <img src="@producto.Foto"
-                                        alt="@producto.Titulo"
-                                        class="card-img-top"
-                                        loading="lazy"
-                                        style="height: 230px; object-fit: cover;" />
+                        <div class="col-12 col-sm-6 col-xl-4 d-flex" @key="producto.Id">
+                            <article class="tarjeta-producto">
+
+                                <div class="tarjeta-media">
+                                    <div class="tarjeta-foto"
+                                        role="button"
+                                        tabindex="0"
+                                        title="Ver imagen completa"
+                                        data-foto="@producto.Foto"
+                                        data-titulo="@producto.Titulo"
+                                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                                        <img src="@producto.Foto" alt="@producto.Titulo" loading="lazy" />
+
+                                        <span class="tarjeta-categoria">
+                                            <i class="bi @IconoDe(producto.Categoria)"></i>
+                                            @producto.Categoria
+                                        </span>
+
+                                        <div class="tarjeta-velo">
+                                            <span><i class="bi bi-arrows-fullscreen"></i> Ver foto completa</span>
+                                        </div>
+                                    </div>
 
                                     <div class="favorito-esquina">
                                         <BotonFavorito ProductoId="@producto.Id.ToString()"
@@ -128,35 +142,31 @@
                                     </div>
                                 </div>
 
-                                <div class="card-body d-flex flex-column">
-                                    <span class="badge bg-light text-primary border align-self-start mb-2">
-                                        @producto.Categoria
-                                    </span>
+                                <div class="tarjeta-cuerpo">
+                                    <h5 class="tarjeta-titulo">@producto.Titulo</h5>
 
-                                    <h5 class="card-title fw-bold">@producto.Titulo</h5>
+                                    <p class="tarjeta-desc descripcion-corta">@producto.Descripcion</p>
 
-                                    @if (!string.IsNullOrWhiteSpace(producto.Descripcion))
-                                    {
-                                        <p class="card-text text-muted small descripcion-corta">
-                                            @producto.Descripcion
-                                        </p>
-                                    }
+                                    <div class="tarjeta-pie">
+                                        <div class="tarjeta-detalles">
+                                            <span><i class="bi bi-rulers"></i>A medida</span>
+                                            <span><i class="bi bi-shield-check"></i>Garantizado</span>
+                                        </div>
 
-                                    <div class="mt-auto pt-3">
-                                        <button type="button"
-                                                class="btn btn-dark w-100 rounded-3"
-                                                @onclick="() => AbrirDetalle(producto)">
-                                            <i class="bi bi-eye me-2"></i>
-                                            Ver más información
-                                        </button>
+                                        <div class="tarjeta-acciones">
+                                            <button type="button" class="btn-detalle" @onclick="() => AbrirDetalle(producto)">
+                                                <i class="bi bi-eye"></i>
+                                                Ver más información
+                                            </button>
 
-                                        <BotonAgregarCotizacion ProductoId="@producto.Id.ToString()"
-                                                                Nombre="@producto.Titulo"
-                                                                Imagen="@producto.Foto" />
-
+                                            <BotonAgregarCotizacion ProductoId="@producto.Id.ToString()"
+                                                                    Nombre="@producto.Titulo"
+                                                                    Imagen="@producto.Foto" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+
+                            </article>
                         </div>
                     }
                 </div>

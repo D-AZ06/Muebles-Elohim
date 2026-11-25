@@ -37,20 +37,22 @@
             <nav class="d-flex gap-3 align-items-center">
 
                 <NavLink class="text-decoration-none text-secondary px-2"
-                    href="/">
-                    Inicio
+                        href="/" Match="NavLinkMatch.All"
+                        aria-label="Inicio" title="Inicio">
+                    <i class="bi bi-house"></i> <span class="nav-texto">Inicio</span>
                 </NavLink>
 
                 <NavLink class="text-decoration-none text-secondary px-2"
-                         href="productos">
-                    Productos
+                        href="productos"
+                        aria-label="Productos" title="Productos">
+                    <i class="bi bi-grid"></i> <span class="nav-texto">Productos</span>
                 </NavLink>
 
                 <ContadorFavoritos />
 
                 <NavLink class="btn btn-primary px-3 text-white"
-                         href="contacto">
-                    Contáctanos
+                        href="contacto">
+                    <i class="bi bi-chat-dots"></i> Contáctanos
                 </NavLink>
 
             </nav>
@@ -69,8 +71,8 @@
     <div class="container text-center">
         <p class="mb-0">&copy; 2026 Muebles Elohim. Todos los derechos reservados. </p>
         <NavLink class="text-decoration-none text-secondary px-2"
-                 href="privacidad">
-            Privacidad
+                href="privacidad">
+            <i class="bi bi-shield-lock"></i> Privacidad
         </NavLink>
 	</div>
 </footer>
@@ -125,7 +127,7 @@
         {
             scrollPendiente = false;
 
-            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+            await JS.InvokeVoidAsync("colapsarHeader");
         }
     }
 

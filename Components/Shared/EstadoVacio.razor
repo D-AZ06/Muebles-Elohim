@@ -1,0 +1,21 @@
+<div class="estado-vacio">
+    <div class="estado-tarjeta">
+        <div class="estado-circulo">
+            <i class="bi @Icono" aria-hidden="true"></i>
+        </div>
+
+        <h1>@Titulo</h1>
+        <p>@Mensaje</p>
+
+        <div class="estado-acciones">
+            <a class="estado-btn estado-btn-principal" href="/productos">Ver productos</a>
+            <a class="estado-btn estado-btn-secundario" href="/contacto">Contáctanos</a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Icono { get; set; } = "bi-inbox";
+    [Parameter] public string Titulo { get; set; } = "";
+    [Parameter] public string Mensaje { get; set; } = "";
+}

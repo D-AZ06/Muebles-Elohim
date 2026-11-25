@@ -408,3 +408,173 @@
     left: .75rem;
     z-index: 3;
 }
+
+/* ===== TARJETA DE PRODUCTO ===== */
+.tarjeta-producto {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+    transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.tarjeta-media {
+    position: relative;
+}
+
+    .tarjeta-producto:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 14px 32px rgba(0, 0, 0, .14);
+    }
+
+.tarjeta-foto {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    background: #f1f1f1;
+    cursor: zoom-in;
+}
+
+.tarjeta-titulo {
+    margin-bottom: .4rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #212529;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+    .tarjeta-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform .6s cubic-bezier(.25, 1, .5, 1);
+    }
+
+.tarjeta-producto:hover .tarjeta-foto img {
+    transform: scale(1.08);
+}
+
+.tarjeta-categoria {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .35rem .75rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .92);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: #0d6efd;
+    font-size: .75rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+}
+
+.tarjeta-velo {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, .55), transparent 55%);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s ease;
+}
+
+    .tarjeta-velo span {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        color: #fff;
+        font-size: .9rem;
+        font-weight: 600;
+        transform: translateY(8px);
+        transition: transform .3s ease;
+    }
+
+.tarjeta-producto:hover .tarjeta-velo {
+    opacity: 1;
+}
+
+    .tarjeta-producto:hover .tarjeta-velo span {
+        transform: none;
+    }
+
+@media (hover: none) {
+    .tarjeta-velo {
+        display: none;
+    }
+}
+
+.tarjeta-cuerpo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.tarjeta-desc {
+    margin-bottom: .75rem;
+    font-size: .875rem;
+    color: #6c757d;
+}
+
+.tarjeta-detalles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem .9rem;
+    font-size: .78rem;
+    color: #6c757d;
+}
+
+    .tarjeta-detalles i {
+        margin-right: .3rem;
+        color: #0d6efd;
+    }
+
+.tarjeta-pie {
+    margin-top: auto;
+}
+
+.tarjeta-acciones {
+    margin-top: .9rem;
+    padding-top: .9rem;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+.tarjeta-detalles + .tarjeta-acciones {
+    margin-top: .9rem;
+    border-top: 1px solid #f0f0f0;
+}
+
+.btn-detalle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    padding: .5rem 1rem;
+    border: 2px solid #212529;
+    border-radius: .5rem;
+    background: #fff;
+    color: #212529;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+    .btn-detalle:hover {
+        background: #212529;
+        color: #fff;
+    }

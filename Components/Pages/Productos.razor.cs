@@ -89,7 +89,7 @@ namespace Muebles_Elohim.Components.Pages
         private async Task IrAPagina(int pagina)
         {
             paginaActual = Math.Clamp(pagina, 1, TotalPaginas);
-            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+            await JS.InvokeVoidAsync("colapsarHeader");
         }
 
         // Panel de detalle (el producto se conserva al cerrar para que no se vacíe durante la animación)
@@ -198,7 +198,7 @@ namespace Muebles_Elohim.Components.Pages
                 Navegacion.NavigateTo("productos");
             }
 
-            await JS.InvokeVoidAsync("window.scrollTo", 0, 0);
+            await JS.InvokeVoidAsync("colapsarHeader");
         }
 
         private void AbrirDetalle(CatalogoFoto producto)
@@ -418,6 +418,19 @@ namespace Muebles_Elohim.Components.Pages
             catch (JSException)
             {
             }
+        }
+
+        private string IconoDe(string categoria)
+        {
+            foreach (CategoriaFiltro c in categorias)
+            {
+                if (c.Clave != "todos" && CoincideCategoria(categoria, c.Clave))
+                {
+                    return c.Icono;
+                }
+            }
+
+            return "bi-tag";
         }
     }
 }

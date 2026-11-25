@@ -1,0 +1,93 @@
+.estado-vacio {
+    min-height: 55vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.estado-tarjeta {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #faf7f2;
+    border: 1px solid #efe6d6;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .05);
+}
+
+.estado-circulo {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f3e7cc;
+    color: #b8892b;
+    font-size: 2.6rem;
+}
+
+h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 .6rem;
+    color: #212529;
+}
+
+p {
+    max-width: 380px;
+    margin: 0 auto 1.75rem;
+    color: #6b6b6b;
+    line-height: 1.5;
+}
+
+.estado-acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .75rem;
+    justify-content: center;
+}
+
+.estado-btn {
+    padding: .65rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background .2s, border-color .2s;
+}
+
+.estado-btn-principal {
+    background: #b8892b;
+    border: 1px solid #b8892b;
+    color: #fff;
+}
+
+    .estado-btn-principal:hover {
+        background: #9c7323;
+        border-color: #9c7323;
+        color: #fff;
+    }
+
+.estado-btn-secundario {
+    background: transparent;
+    border: 1px solid #cfc6b4;
+    color: #212529;
+}
+
+    .estado-btn-secundario:hover {
+        background: #f3e7cc;
+        color: #212529;
+    }
+
+@media (max-width: 576px) {
+    .estado-tarjeta {
+        padding: 2rem 1.25rem;
+    }
+
+    .estado-btn {
+        width: 100%;
+    }
+}
