@@ -342,3 +342,219 @@ body {
         font-size: .65rem;
     }
 }
+
+/* ===== ANIMACIONES LIGERAS ===== */
+
+/* ----- Skeleton mientras carga el catalogo ----- */
+.skeleton {
+    position: relative;
+    overflow: hidden;
+    background: #e9ecef;
+}
+
+    .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent);
+        animation: skeleton-brillo 1.3s ease-in-out infinite;
+    }
+
+@keyframes skeleton-brillo {
+    to { transform: translateX(100%); }
+}
+
+.skeleton-tarjeta {
+    width: 100%;
+    background: #fff;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, .07);
+}
+
+.skeleton-foto { height: 240px; }
+
+.skeleton-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    padding: 1.1rem;
+}
+
+.skeleton-linea { height: .9rem; border-radius: .45rem; }
+.skeleton-boton { height: 2.4rem; margin-top: .5rem; border-radius: 50px; }
+
+/* ----- Tarjetas nuevas: suben y crecen en cascada ----- */
+@keyframes entra-subir {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(.94);
+    }
+}
+
+.entra {
+    animation: entra-subir .6s cubic-bezier(.22, 1, .36, 1) backwards;
+}
+
+.entra:nth-child(2)  { animation-delay: .07s; }
+.entra:nth-child(3)  { animation-delay: .14s; }
+.entra:nth-child(4)  { animation-delay: .21s; }
+.entra:nth-child(5)  { animation-delay: .28s; }
+.entra:nth-child(6)  { animation-delay: .35s; }
+.entra:nth-child(7)  { animation-delay: .42s; }
+.entra:nth-child(8)  { animation-delay: .49s; }
+.entra:nth-child(9)  { animation-delay: .56s; }
+.entra:nth-child(10) { animation-delay: .63s; }
+.entra:nth-child(11) { animation-delay: .70s; }
+.entra:nth-child(12) { animation-delay: .77s; }
+
+/* ----- Entrada de pagina al navegar (dos nombres para poder repetirla) ----- */
+@keyframes entrada-a {
+    from { opacity: 0; transform: translateY(18px); }
+}
+
+@keyframes entrada-b {
+    from { opacity: 0; transform: translateY(18px); }
+}
+
+.entrada-a { animation: entrada-a .45s ease-out; }
+.entrada-b { animation: entrada-b .45s ease-out; }
+
+/* ----- Aparicion al hacer scroll (Chrome/Edge/Safari recientes) ----- */
+@keyframes reveal-subir {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+}
+
+@supports (animation-timeline: view()) {
+    .reveal {
+        animation: reveal-subir linear backwards;
+        animation-timeline: view();
+        animation-range: entry 0% entry 60%;
+    }
+}
+
+/* ----- Efecto al presionar botones ----- */
+.btn:active:not(:disabled):not(.disabled),
+.chip:active {
+    transform: scale(.95);
+}
+
+/* ----- Si el dispositivo pide "reducir movimiento": solo fundido, sin desplazamiento ----- */
+@keyframes entra-fundido { from { opacity: 0; } }
+@keyframes entrada-a-fundido { from { opacity: 0; } }
+@keyframes entrada-b-fundido { from { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+    .entra { animation-name: entra-fundido; animation-delay: 0s !important; }
+    .entrada-a { animation-name: entrada-a-fundido; }
+    .entrada-b { animation-name: entrada-b-fundido; }
+    .reveal { animation: none !important; }
+    .skeleton::after { animation: none; }
+}
+
+
+/* ===== MAS ANIMACIONES ===== */
+
+/* Corazon: latido al marcarlo */
+@keyframes latido {
+    0%   { scale: 1; }
+    30%  { scale: 1.5; }
+    60%  { scale: .9; }
+    100% { scale: 1; }
+}
+
+.btn-favorito.activo i {
+    animation: latido .5s ease;
+}
+
+/* Numeritos: rebotan al aparecer o cambiar */
+@keyframes pop {
+    0%   { scale: .4; }
+    60%  { scale: 1.3; }
+    100% { scale: 1; }
+}
+
+.insignia,
+.cotizar-badge {
+    animation: pop .4s ease;
+}
+
+/* Boton "En tu lista" */
+@keyframes pop-suave {
+    0%   { scale: .92; }
+    60%  { scale: 1.04; }
+    100% { scale: 1; }
+}
+
+.btn-cotizar.agregado {
+    animation: pop-suave .4s ease;
+}
+
+/* WhatsApp flotante: saludo cada 4 segundos */
+@keyframes saludo {
+    0%, 60% { rotate: 0deg; }
+    66%     { rotate: -14deg; }
+    72%     { rotate: 12deg; }
+    78%     { rotate: -10deg; }
+    84%     { rotate: 8deg; }
+    90%, 100% { rotate: 0deg; }
+}
+
+.btn-whatsapp-flotante i {
+    animation: saludo 4s ease-in-out infinite;
+}
+
+/* Paginas vacias: el circulo flota */
+@keyframes flotar {
+    50% { translate: 0 -8px; }
+}
+
+.estado-circulo {
+    animation: flotar 3.5s ease-in-out infinite;
+}
+
+/* Home: iconos rebotan al pasar el mouse */
+@keyframes rebote {
+    40% { translate: 0 -10px; }
+    70% { translate: 0 2px; }
+}
+
+.feature-card:hover .bi::before {
+    animation: rebote .5s ease;
+}
+
+/* Modal de producto */
+@keyframes modal-zoom {
+    from { opacity: 0; scale: 1.08; }
+}
+
+@keyframes modal-sube {
+    from { opacity: 0; translate: 0 24px; }
+}
+
+.detalle-modal-contenedor.abierto .foto-principal {
+    animation: modal-zoom .6s ease-out both;
+}
+
+.detalle-modal-contenedor.abierto .detalle-info-container {
+    animation: modal-sube .5s .1s ease-out both;
+}
+
+/* Si el dispositivo pide reducir movimiento, se apagan */
+@media (prefers-reduced-motion: reduce) {
+    .btn-favorito.activo i,
+    .insignia,
+    .cotizar-badge,
+    .btn-cotizar.agregado,
+    .btn-whatsapp-flotante i,
+    .estado-circulo,
+    .feature-card:hover .bi::before,
+    .detalle-modal-contenedor.abierto .foto-principal,
+    .detalle-modal-contenedor.abierto .detalle-info-container {
+        animation: none;
+    }
+}

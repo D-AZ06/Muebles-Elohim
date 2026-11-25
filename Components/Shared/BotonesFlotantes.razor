@@ -33,7 +33,7 @@
                 <a href="cotizacion" class="btn btn-cotizar-flotante @("p" + PosCotizar)" aria-label="Ver mi cotización">
                     <i class="bi bi-clipboard-check"></i>
                     <span class="btn-text">Cotizar</span>
-                    <span class="cotizar-badge">@(total > 99 ? "99+" : total.ToString())</span>
+                    <span class="cotizar-badge" @key="total">@(total > 99 ? "99+" : total.ToString())</span>
                 </a>
             }
         </div>

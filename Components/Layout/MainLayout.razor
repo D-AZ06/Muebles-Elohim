@@ -53,7 +53,9 @@
         </div>
 
         <article class="content px-4 py-3">
-            @Body
+            <div class="cuerpo-pagina @claseEntrada">
+                @Body
+            </div>
             <BotonesFlotantes />
         </article>
 
@@ -73,6 +75,8 @@
 @code {
     private bool scrollPendiente = false;
     private string rutaAnterior = "";
+    private string claseEntrada = "";
+    private int cambiosDePagina = 0;
 
     protected override void OnInitialized()
     {
@@ -97,6 +101,11 @@
         await InvokeAsync(() =>
         {
             scrollPendiente = true;
+
+            // Alternar el nombre de la clase hace que la animación se repita en cada cambio de página
+            cambiosDePagina++;
+            claseEntrada = cambiosDePagina % 2 == 0 ? "entrada-a" : "entrada-b";
+
             StateHasChanged();
         });
     }
@@ -116,11 +125,29 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // La app ya está conectada: desde aquí lo nuevo sí se anima
+        if (firstRender)
+        {
+            Animacion.Activo = true;
+        }
+
         if (scrollPendiente)
         {
             scrollPendiente = false;
 
             await JS.InvokeVoidAsync("colapsarHeader");
+        }
+    }
+
+    // Las animaciones son solo decorativas: si algo falla, la app sigue igual
+    private async Task AnimarAsync(string funcion)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync(funcion);
+        }
+        catch (Exception)
+        {
         }
     }
 

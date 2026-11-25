@@ -6,7 +6,7 @@
     Mi cotización
     @if (Lista.TotalUnidades() > 0)
     {
-        <span class="insignia">@Lista.TotalUnidades()</span>
+        <span class="insignia" @key="Lista.TotalUnidades()">@Lista.TotalUnidades()</span>
     }
 </a>
 

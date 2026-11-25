@@ -82,11 +82,23 @@
 
             @if (cargando)
             {
-                <div class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Cargando...</span>
-                    </div>
-                    <p class="text-muted mt-3">Cargando productos...</p>
+                <div class="row g-4" role="status" aria-busy="true">
+                    <span class="visually-hidden">Cargando productos...</span>
+
+                    @for (int i = 0; i < 6; i++)
+                    {
+                        <div class="col-12 col-sm-6 col-xl-4 d-flex" aria-hidden="true">
+                            <div class="skeleton-tarjeta">
+                                <div class="skeleton skeleton-foto"></div>
+                                <div class="skeleton-cuerpo">
+                                    <div class="skeleton skeleton-linea" style="width:70%"></div>
+                                    <div class="skeleton skeleton-linea"></div>
+                                    <div class="skeleton skeleton-linea" style="width:55%"></div>
+                                    <div class="skeleton skeleton-boton"></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             }
             else if (!string.IsNullOrEmpty(mensajeError))
@@ -112,7 +124,7 @@
                 <div class="row g-4">
                     @foreach (var producto in ProductosPagina)
                     {
-                        <div class="col-12 col-sm-6 col-xl-4 d-flex" @key="producto.Id">
+                        <div class="col-12 col-sm-6 col-xl-4 d-flex @(animar ? "entra" : "")" @key="(categoriaSeleccionada, producto.Id)">
                             <article class="tarjeta-producto">
 
                                 <div class="tarjeta-media">

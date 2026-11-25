@@ -24,6 +24,7 @@ namespace Muebles_Elohim
             builder.Services.AddScoped<ListaCotizacionServicio>();
             builder.Services.AddScoped<FavoritosServicio>();
             builder.Services.AddScoped<CotizacionServicio>();
+            builder.Services.AddScoped<EstadoAnimacionServicio>();
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<CatalogoServicio>();

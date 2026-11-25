@@ -34,7 +34,7 @@
         <ul class="items">
             @foreach (ItemFavorito item in Servicio.Items)
             {
-                <li class="item" @key="item.ProductoId">
+                <li class="item reveal" @key="item.ProductoId">
                     @if (!string.IsNullOrEmpty(item.Imagen))
                     {
                         <img src="@item.Imagen" alt="@item.Nombre" />

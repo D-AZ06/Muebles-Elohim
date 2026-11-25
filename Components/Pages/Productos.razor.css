@@ -29,7 +29,7 @@
 .filtro-movil {
     position: sticky;
     top: var(--altura-header);
-    z-index: 2;
+    z-index: 10;
     margin: 0 -0.75rem 1rem;
     padding: .6rem .75rem;
     background: var(--bs-body-bg, #fff);
@@ -210,6 +210,10 @@
         height: auto;
         /* max-height: calc(100dvh - 150px - 280px); */ 
         padding: 1.25rem;
+    }
+
+    .catalogo {
+        --altura-header: 60px;
     }
 }
 

@@ -6,7 +6,7 @@
     <i class="bi bi-heart"></i> <span class="nav-texto">Favoritos</span>
     @if (Favoritos.Items.Count > 0)
     {
-        <span class="insignia">@Favoritos.Items.Count</span>
+        <span class="insignia" @key="Favoritos.Items.Count">@Favoritos.Items.Count</span>
     }
 </NavLink>
 

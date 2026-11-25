@@ -42,6 +42,8 @@ namespace Muebles_Elohim.Components.Pages
 
         private bool productoNoDisponible;
 
+        private bool animar;
+
         private string TituloPagina
         {
             get
@@ -88,6 +90,7 @@ namespace Muebles_Elohim.Components.Pages
 
         private async Task IrAPagina(int pagina)
         {
+            animar = true;
             paginaActual = Math.Clamp(pagina, 1, TotalPaginas);
             await JS.InvokeVoidAsync("colapsarHeader");
         }
@@ -119,6 +122,7 @@ namespace Muebles_Elohim.Components.Pages
         // Cargar productos al iniciar la página
         protected override async Task OnInitializedAsync()
         {
+            animar = Animacion.Activo;
             await CargarProductos();
         }
 
@@ -189,6 +193,7 @@ namespace Muebles_Elohim.Components.Pages
         }
         private async Task SeleccionarCategoria(string categoria)
         {
+            animar = true;
             categoriaSeleccionada = categoria;
             paginaActual = 1;
             panelAbierto = false;
