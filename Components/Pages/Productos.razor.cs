@@ -43,6 +43,7 @@ namespace Muebles_Elohim.Components.Pages
         private bool productoNoDisponible;
 
         private bool animar;
+        private bool panelEstabaAbierto;
 
         private string TituloPagina
         {
@@ -133,6 +134,17 @@ namespace Muebles_Elohim.Components.Pages
                 enfocarModal = false;
                 await modalRef.FocusAsync();
             }
+
+            // Al cerrar el detalle se vuelve al mismo punto de la lista
+            if (panelEstabaAbierto && !panelAbierto)
+            {
+                panelEstabaAbierto = false;
+                await JS.InvokeVoidAsync("restaurarScrollLista");
+            }
+            else if (panelAbierto)
+            {
+                panelEstabaAbierto = true;
+            }
         }
 
         private void CambiarProducto(int paso)
@@ -197,6 +209,7 @@ namespace Muebles_Elohim.Components.Pages
             categoriaSeleccionada = categoria;
             paginaActual = 1;
             panelAbierto = false;
+            panelEstabaAbierto = false;
 
             if (IdProducto is not null)
             {
@@ -206,8 +219,11 @@ namespace Muebles_Elohim.Components.Pages
             await JS.InvokeVoidAsync("colapsarHeader");
         }
 
-        private void AbrirDetalle(CatalogoFoto producto)
+        private async Task AbrirDetalle(CatalogoFoto producto)
         {
+            // Se guarda en qué punto de la lista estaba el usuario
+            await JS.InvokeVoidAsync("guardarScrollLista");
+
             productoSeleccionado = producto;
             panelAbierto = true;
             enlaceCopiado = false;
