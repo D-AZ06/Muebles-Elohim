@@ -51,7 +51,7 @@ h1:focus {
 }
 
 /* ===== MEN� M�VIL: que quepa en pantallas angostas ===== */
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     .top-row nav {
         gap: .15rem !important;
         min-width: 0;
@@ -72,9 +72,9 @@ h1:focus {
     #logoSticky {
         display: none !important;
     }
-}
+} */
 
-@media (max-width: 359.98px) {
+/* @media (max-width: 359.98px) {
     .top-row {
         padding: 0 6px !important;
     }
@@ -99,7 +99,7 @@ h1:focus {
         padding: 0 .25rem !important;
         font-size: .65rem !important;
     }
-}
+} */
 
 /* Red de seguridad: clip no rompe los elementos sticky */
 html, body {
@@ -205,11 +205,11 @@ footer.footer {
     --alto-header: 280px;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
     :root {
         --alto-header: 180px;
     }
-}
+} */
 
 body {
     min-height: calc(100vh + var(--alto-header));
@@ -234,14 +234,111 @@ body {
     vertical-align: -0.12em;
 }
 
-/* En pantallas muy angostas, Inicio/Productos/Favoritos quedan solo con icono
-   para que el menu no se desborde. "Contáctanos" conserva el texto. */
-@media (max-width: 480px) {
-    .top-row nav .nav-texto {
-        display: none;
+/* ===== BARRA SUPERIOR ===== */
+.top-row nav { display: flex; align-items: stretch; gap: .25rem; margin: 0; }
+.nav-centro { justify-self: center; }
+.nav-derecha { justify-self: end; align-items: center; gap: .5rem; }
+
+.top-row nav a:not(.btn) {
+    position: relative; display: inline-flex; align-items: center; gap: .4rem;
+    padding: 0 .9rem; color: #6c757d; font-weight: 500;
+    text-decoration: none; white-space: nowrap; transition: color .2s;
+}
+.top-row nav a:not(.btn):hover,
+.top-row nav a:not(.btn).active { color: #212529; }
+
+/* Indicador de pagina activa */
+.top-row nav a:not(.btn).active::after {
+    content: ""; position: absolute; left: .6rem; right: .6rem; bottom: 0;
+    height: 3px; border-radius: 3px 3px 0 0; background: #f57c00;
+}
+
+.top-row nav a .bi { font-size: 1.1rem; }
+
+.insignia {
+    min-width: 1.3rem; padding: 0 .4rem; border-radius: 999px;
+    background: #f57c00; color: #fff; font-size: .75rem; text-align: center;
+}
+
+@media (max-width: 991.98px) { #logoSticky span { display: none; } }
+
+.top-row nav a.active {
+    color: var(--bs-primary, #0d6efd);
+    font-weight: 600;
+}
+
+/* Boton "Contactanos": texto siempre legible cuando la pestana esta activa */
+.top-row nav a.btn.active {
+    color: #fff;
+}
+
+/* ===== MENU MOVIL ESTILO FACEBOOK (pestanas distribuidas) ===== */
+@media (max-width: 768px) {
+
+    /* La barra pasa de grid a flex y los <nav> "desaparecen" como cajas,
+       asi todas las opciones quedan como hermanas y se reparten el ancho */
+    .top-row {
+        display: flex !important;
+        align-items: stretch;
+        gap: .15rem;
+        padding: 0 6px !important;
+    }
+
+    .top-row nav {
+        display: contents !important;
+    }
+
+    /* Cada opcion = una pestana de ancho equitativo, icono centrado */
+    .top-row nav a {
+        flex: 1 1 0;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .35rem;
+        padding: 0 .25rem !important;
+        font-size: .8rem;
+        transition: flex-grow .3s ease, color .2s;
     }
 
     .top-row nav a .bi {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
+    }
+
+    /* Solo la pestana activa muestra el nombre y se ensancha */
+    .top-row nav .nav-texto {
+        display: none !important;
+    }
+
+    .top-row nav a.active {
+        flex-grow: 2.4;
+    }
+
+    .top-row nav a.active .nav-texto {
+        display: inline !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* El indicador naranja se ajusta al ancho de la pestana */
+    .top-row nav a:not(.btn).active::after {
+        left: .4rem;
+        right: .4rem;
+    }
+
+    /* Contactanos: sigue siendo boton, pero ocupa su espacio como las demas */
+    .top-row nav a.btn {
+        align-self: center;
+        padding: .5rem .25rem !important;
+    }
+
+    /* Contador de favoritos: sobre la esquina del icono */
+    .insignia {
+        position: absolute;
+        top: .4rem;
+        right: .3rem;
+        min-width: 1.05rem;
+        padding: 0 .25rem;
+        font-size: .65rem;
     }
 }

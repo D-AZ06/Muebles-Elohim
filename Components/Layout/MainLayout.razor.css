@@ -1,58 +1,60 @@
-﻿
-    /* ===== HEADER PRINCIPAL ===== */
+﻿/* ===== HEADER PRINCIPAL ===== */
 
-    header {
-        height: 280px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: white;
-        overflow: hidden;
-    }
+header { 
+    height: 280px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    background: white; 
+    overflow: hidden; 
+}
 
-    .logo-grande {
-        width: 260px;
-        max-width: 90%;
-        display: block;
-        margin: auto;
-        transition: all .6s ease;
-    }
+.logo-grande { 
+    width: 260px; 
+    max-width: 90%; 
+    display: block; 
+    margin: auto; 
+    transition: all .6s ease; 
+}
+
 
     /* ===== BARRA STICKY ===== */
 
     .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: white;
-        border-bottom: 1px solid #ddd;
-        min-height: 70px;
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        box-shadow: 0 2px 8px rgba(0,0,0,.08);
-    }
+    position: sticky; 
+    top: 0; 
+    z-index: 1000; 
+    background: white;
+    border-bottom: 1px solid #ddd; 
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    min-height: 70px; 
+    padding: 0 20px;
+    display: grid; 
+    grid-template-columns: 1fr auto 1fr; 
+    align-items: stretch;
+}
 
     /* ===== LOGO DEL STICKY ===== */
 
     #logoSticky {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        opacity: 0;
-        transition: all .6s ease;
-        pointer-events: none;
-        white-space: nowrap;
-    }
+    align-self: center; 
+    justify-self: start;
+    display: flex; 
+    align-items: center; 
+    gap: 8px;
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity .6s ease;
+    white-space: nowrap; 
+    color: #212529; 
+    text-decoration: none; 
+    font-weight: 600;
+}
 
-    .logo-mini {
-        width: 34px;
-        height: auto;
-    }
+.logo-mini { 
+    width: 34px; 
+    height: auto; 
+}
 
     #logoSticky span {
         font-size: 1rem;
@@ -104,25 +106,7 @@
 
         .top-row {
             min-height: 60px;
-            padding: 0 10px;
         }
-
-            .top-row nav {
-                gap: .15rem;
-                min-width: 0;
-            }
-
-                .top-row nav a {
-                    font-size: .75rem;
-                    white-space: nowrap;
-                    padding-left: .3rem !important;
-                    padding-right: .3rem !important;
-                }
-
-                .top-row nav .btn {
-                    padding-left: .6rem !important;
-                    padding-right: .6rem !important;
-                }
 
         #logoSticky {
             display: none;

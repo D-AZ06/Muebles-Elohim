@@ -24,37 +24,30 @@
 
         <div class="top-row">
 
-            <div id="logoSticky">
-
+            <a id="logoSticky" href="/" aria-label="Inicio">
                 <img class="logo-mini"
-                     src="https://dhqcnrgknozpixhplobn.supabase.co/storage/v1/object/public/Logo/logo_MC_solo_emblema.png"
-                     alt="Logo" />
-
+                    src="https://dhqcnrgknozpixhplobn.supabase.co/storage/v1/object/public/Logo/logo_MC_solo_emblema.png"
+                    alt="" />
                 <span>Muebles Elohim</span>
+            </a>
 
-            </div>
-
-            <nav class="d-flex gap-3 align-items-center">
-
-                <NavLink class="text-decoration-none text-secondary px-2"
-                        href="/" Match="NavLinkMatch.All"
-                        aria-label="Inicio" title="Inicio">
+            <nav class="nav-centro">
+                <NavLink href="/" Match="NavLinkMatch.All" aria-label="Inicio" title="Inicio">
                     <i class="bi bi-house"></i> <span class="nav-texto">Inicio</span>
                 </NavLink>
-
-                <NavLink class="text-decoration-none text-secondary px-2"
-                        href="productos"
-                        aria-label="Productos" title="Productos">
+                <NavLink href="productos" aria-label="Productos" title="Productos">
                     <i class="bi bi-grid"></i> <span class="nav-texto">Productos</span>
                 </NavLink>
-
-                <ContadorFavoritos />
-
-                <NavLink class="btn btn-primary px-3 text-white"
-                        href="contacto">
-                    <i class="bi bi-chat-dots"></i> Contáctanos
+                <NavLink href="privacidad" aria-label="Privacidad" title="Privacidad">
+                    <i class="bi bi-shield-lock"></i> <span class="nav-texto">Privacidad</span>
                 </NavLink>
+            </nav>
 
+            <nav class="nav-derecha">
+                <ContadorFavoritos />
+                <NavLink class="btn btn-primary" href="contacto" aria-label="Contáctanos" title="Contáctanos">
+                    <i class="bi bi-chat-dots"></i> <span class="nav-texto">Contáctanos</span>
+                </NavLink>
             </nav>
 
         </div>
