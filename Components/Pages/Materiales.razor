@@ -1,0 +1,77 @@
+@page "/materiales"
+@rendermode InteractiveServer
+@using Muebles_Elohim.Models
+@using Muebles_Elohim.Services
+@inject MaterialesServicio MaterialesSrv
+
+<PageTitle>Materiales - Muebles Elohim</PageTitle>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<div class="container py-4">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold display-5 text-uppercase">Materiales</h1>
+        <p class="text-muted fs-5">Calidad que dura en cada mueble</p>
+        <div class="mx-auto border-top border-primary border-3 divisor"></div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-5">
+        <h3 class="fw-bold fs-4 mb-2"><i class="bi bi-droplet-half text-primary me-2"></i>Trabajamos con laminado RH</h3>
+        <p class="mb-0 text-secondary">
+            Todos nuestros muebles se fabrican en aglomerado RH (resistente a la humedad),
+            ideal para cocinas, baños y el clima de nuestra región. Elige entre una gran variedad
+            de texturas, maderas y colores para darle tu estilo.
+        </p>
+    </div>
+
+    @if (cargando)
+    {
+        <p class="text-center text-muted">Cargando materiales...</p>
+    }
+    else if (materiales.Count == 0)
+    {
+        <p class="text-center text-muted">Pronto publicaremos nuestros materiales.</p>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var m in materiales)
+            {
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card tarjeta-material h-100 border-0 shadow-sm rounded-4">
+                        <div class="material-foto">
+                            <img src="@m.Foto" alt="@m.Nombre" loading="lazy" />
+                            @if (!string.IsNullOrWhiteSpace(m.Tipo))
+                            {
+                                <span class="material-tipo">@m.Tipo</span>
+                            }
+                        </div>
+                        <div class="p-3">
+                            <h6 class="fw-bold mb-1">@m.Nombre</h6>
+                            <p class="small text-secondary mb-0">@m.Descripcion</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Material> materiales = new();
+    private bool cargando = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            materiales = await MaterialesSrv.ObtenerAsync();
+        }
+        catch (Exception)
+        {
+            materiales = new();
+        }
+
+        cargando = false;
+    }
+}

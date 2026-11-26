@@ -1,0 +1,34 @@
+.divisor { width: 80px; }
+
+.tarjeta-material {
+    overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+    .tarjeta-material:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .12) !important;
+    }
+
+.material-foto {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+
+    .material-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.material-tipo {
+    position: absolute;
+    top: .5rem;
+    left: .5rem;
+    background: rgba(0, 0, 0, .65);
+    color: #fff;
+    font-size: .7rem;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+}

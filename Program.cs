@@ -28,6 +28,7 @@ namespace Muebles_Elohim
 
             builder.Services.AddMemoryCache();
             builder.Services.AddScoped<CatalogoServicio>();
+            builder.Services.AddScoped<MaterialesServicio>();
 
 
             // ==========================================
@@ -108,7 +109,7 @@ namespace Muebles_Elohim
                 string sitio = (config["Contacto:SitioUrl"] ?? "").TrimEnd('/');
                 if (sitio.Length == 0) return Results.NotFound();
 
-                var rutas = new List<string> { "", "/productos", "/contacto", "/privacidad" };
+                var rutas = new List<string> { "", "/productos", "/materiales", "/contacto", "/privacidad" };
                 foreach (var p in await catalogo.ObtenerAsync())
                 {
                     rutas.Add("/productos?id=" + p.Id);

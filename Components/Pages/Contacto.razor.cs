@@ -13,6 +13,9 @@ namespace Muebles_Elohim.Components.Pages
         private string urlWhatsApp = string.Empty;
         private string mensajePredeterminado = Uri.EscapeDataString("¡Hola! Me comunico desde la página web de Muebles Elohim, me gustaría solicitar información y cotización sobre sus productos.");
 
+        private string urlFacebookPagina = string.Empty;
+        private string urlFacebookMarketplace = string.Empty;
+
         protected override void OnInitialized()
         {
             // Obtiene el número directamente desde la sección "Contacto" de tu configuración
@@ -20,6 +23,9 @@ namespace Muebles_Elohim.Components.Pages
 
             // Construye la URL de manera dinámica
             urlWhatsApp = $"https://wa.me/{numeroTelefono}?text={mensajePredeterminado}";
+
+            urlFacebookPagina = Opciones.Value.FacebookPagina;
+            urlFacebookMarketplace = Opciones.Value.FacebookMarketplace;
         }
     }
 }

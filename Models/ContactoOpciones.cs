@@ -13,5 +13,8 @@
 
         public string Correo { get; set; } = string.Empty;
         public string SitioUrl { get; set; } = string.Empty;
+
+        public string FacebookPagina { get; set; } = string.Empty;
+        public string FacebookMarketplace { get; set; } = string.Empty;
     }
 }
