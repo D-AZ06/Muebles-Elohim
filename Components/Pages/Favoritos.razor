@@ -39,7 +39,7 @@
                     {
                         <img src="@item.Imagen" alt="@item.Nombre" />
                     }
-                    <a class="nombre" href="/productos?id=@item.ProductoId">@item.Nombre</a>
+                    <a class="nombre" href="@(item.ProductoId.StartsWith("mat-") ? "/materiales?id=" + item.ProductoId.Substring(4) : "/productos?id=" + item.ProductoId)">@item.Nombre</a>
                     <div class="acciones">
                         <BotonAgregarCotizacion ProductoId="@item.ProductoId"
                                                 Nombre="@item.Nombre"

@@ -77,7 +77,9 @@ namespace Muebles_Elohim.Services
 
         private string EnlaceProducto(string id)
         {
-            string ruta = "productos?id=" + Uri.EscapeDataString(id);
+            string ruta = id.StartsWith("mat-")
+                ? "materiales?id=" + Uri.EscapeDataString(id.Substring(4))
+                : "productos?id=" + Uri.EscapeDataString(id);  
 
             if (!string.IsNullOrWhiteSpace(_contacto.SitioUrl))
             {

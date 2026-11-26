@@ -1,21 +1,30 @@
 @page "/materiales"
 @rendermode InteractiveServer
-@using Muebles_Elohim.Models
-@using Muebles_Elohim.Services
-@inject MaterialesServicio MaterialesSrv
+@using Muebles_Elohim.Components.Shared
 
-<PageTitle>Materiales - Muebles Elohim</PageTitle>
+<PageTitle>@(panelAbierto && seleccionado is not null ? seleccionado.Nombre + " - Materiales - Muebles Elohim" : "Materiales - Muebles Elohim")</PageTitle>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>html { scroll-behavior: smooth; }</style>
 
-<div class="container py-4">
-    <div class="text-center mb-5">
+@if (panelAbierto && seleccionado is not null)
+{
+    <HeadContent>
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="@seleccionado.Nombre - Muebles Elohim" />
+        <meta property="og:description" content="@seleccionado.Descripcion" />
+        <meta property="og:image" content="@seleccionado.Foto" />
+    </HeadContent>
+}
+
+<div class="container py-4 @(panelAbierto ? "bloqueado" : "")">
+    <div class="text-center mb-4">
         <h1 class="fw-bold display-5 text-uppercase">Materiales</h1>
         <p class="text-muted fs-5">Calidad que dura en cada mueble</p>
         <div class="mx-auto border-top border-primary border-3 divisor"></div>
     </div>
 
-    <div class="card border-0 shadow-sm rounded-4 p-4 mb-5">
+    <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
         <h3 class="fw-bold fs-4 mb-2"><i class="bi bi-droplet-half text-primary me-2"></i>Trabajamos con laminado RH</h3>
         <p class="mb-0 text-secondary">
             Todos nuestros muebles se fabrican en aglomerado RH (resistente a la humedad),
@@ -26,52 +35,169 @@
 
     @if (cargando)
     {
-        <p class="text-center text-muted">Cargando materiales...</p>
+        <p class="text-center text-muted py-5">Cargando materiales...</p>
     }
-    else if (materiales.Count == 0)
+    else if (grupos.Count == 0)
     {
-        <p class="text-center text-muted">Pronto publicaremos nuestros materiales.</p>
+        <p class="text-center text-muted py-5">Pronto publicaremos nuestros materiales.</p>
     }
     else
     {
-        <div class="row g-4">
-            @foreach (var m in materiales)
+        <div class="indice-movil d-lg-none">
+            @foreach (var g in grupos)
             {
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="card tarjeta-material h-100 border-0 shadow-sm rounded-4">
-                        <div class="material-foto">
-                            <img src="@m.Foto" alt="@m.Nombre" loading="lazy" />
-                            @if (!string.IsNullOrWhiteSpace(m.Tipo))
+                <a class="chip-indice" href="#@g.Ancla"><i class="bi @g.Icono me-1"></i>@g.Titulo</a>
+            }
+        </div>
+
+        <div class="row">
+            <aside class="col-lg-3 d-none d-lg-block">
+                <nav class="indice" aria-label="Índice de materiales">
+                    <h6><i class="bi bi-list-ul me-2"></i>Índice</h6>
+                    @foreach (var g in grupos)
+                    {
+                        <a href="#@g.Ancla"><i class="bi @g.Icono"></i>@g.Titulo<span>@g.Items.Count</span></a>
+                    }
+                </nav>
+            </aside>
+
+            <main class="col-lg-9">
+                @foreach (var g in grupos)
+                {
+                    <section id="@g.Ancla" class="seccion">
+                        <h2 class="seccion-titulo"><i class="bi @g.Icono"></i>@g.Titulo</h2>
+
+                        <div class="row g-3 g-md-4">
+                            @foreach (var m in g.Items)
                             {
-                                <span class="material-tipo">@m.Tipo</span>
+                                <div class="col-6 col-md-4 col-xl-3" @key="m.Id">
+                                    <article class="muestra">
+                                        <div class="muestra-foto"
+                                             role="button"
+                                             tabindex="0"
+                                             title="Ver imagen completa"
+                                             data-foto="@m.Foto"
+                                             data-titulo="@m.Nombre"
+                                             onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                                            <img src="@m.Foto" alt="@m.Nombre" loading="lazy" />
+                                            <span class="muestra-tipo"><i class="bi @g.Icono"></i></span>
+                                        </div>
+
+                                        <h3 class="muestra-nombre">@m.Nombre</h3>
+
+                                        <div class="muestra-iconos">
+                                            <button type="button" class="ic-ojo" title="Ver más información"
+                                                    aria-label="Ver más información de @m.Nombre"
+                                                    @onclick="() => AbrirDetalle(m)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <BotonFavorito ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" />
+                                            <BotonCotizacionIcono ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" />
+                                        </div>
+                                    </article>
+                                </div>
                             }
                         </div>
-                        <div class="p-3">
-                            <h6 class="fw-bold mb-1">@m.Nombre</h6>
-                            <p class="small text-secondary mb-0">@m.Descripcion</p>
-                        </div>
-                    </div>
-                </div>
-            }
+                    </section>
+                }
+            </main>
         </div>
     }
 </div>
 
-@code {
-    private List<Material> materiales = new();
-    private bool cargando = true;
+<div class="det-fondo @(panelAbierto ? "visible" : "")" @onclick="CerrarDetalle"></div>
 
-    protected override async Task OnInitializedAsync()
+<div class="det-modal @(panelAbierto ? "abierto" : "")"
+     @ref="modalRef" tabindex="-1" @onkeydown="TeclaModal"
+     role="dialog" aria-modal="true" aria-label="Información del material">
+    @if (seleccionado is not null)
     {
-        try
-        {
-            materiales = await MaterialesSrv.ObtenerAsync();
-        }
-        catch (Exception)
-        {
-            materiales = new();
-        }
+        <div class="det-grid">
+            <div class="det-foto">
+                <div class="det-blur" style="background-image: url('@seleccionado.Foto');"></div>
+                <img src="@seleccionado.Foto" alt="@seleccionado.Nombre" />
 
-        cargando = false;
+                <div class="det-corazon">
+                    <BotonFavorito ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
+                </div>
+
+                <button type="button" class="det-ampliar" title="Ver imagen completa" aria-label="Ver imagen completa"
+                        data-foto="@seleccionado.Foto" data-titulo="@seleccionado.Nombre"
+                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </button>
+            </div>
+
+            <div class="det-info">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <span class="badge bg-light text-primary border">@TituloTipo(seleccionado.Tipo)</span>
+                    <button type="button" class="btn-close" aria-label="Cerrar" @onclick="CerrarDetalle"></button>
+                </div>
+
+                <h3 class="fw-bold text-dark h4 mb-3">@seleccionado.Nombre</h3>
+
+                <div class="det-texto">
+                    @if (!string.IsNullOrWhiteSpace(seleccionado.Descripcion))
+                    {
+                        <p class="text-muted m-0">@seleccionado.Descripcion</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic m-0">Sin descripción disponible.</p>
+                    }
+                </div>
+
+                <div class="det-acciones">
+                    <div class="compartir-wrapper" @onmouseenter="() => menuCompartirAbierto = true" @onmouseleave="() => menuCompartirAbierto = false">
+                        <button type="button" class="ic-ojo" aria-label="Compartir material" title="Compartir"
+                                aria-expanded="@menuCompartirAbierto"
+                                @onclick="() => menuCompartirAbierto = !menuCompartirAbierto">
+                            <i class="bi @(enlaceCopiado ? "bi-check2 text-success" : "bi-share")"></i>
+                        </button>
+
+                        @if (menuCompartirAbierto)
+                        {
+                            <div class="compartir-menu" role="menu">
+                                <button type="button" class="compartir-item" role="menuitem" @onclick="PreguntarPorWhatsApp">
+                                    <i class="bi bi-whatsapp text-success"></i>
+                                    <div class="text-start">
+                                        <div class="fw-semibold small text-dark">Consultar por WhatsApp</div>
+                                        <div class="text-muted" style="font-size:.72rem;">Enviar con info del material</div>
+                                    </div>
+                                </button>
+                                <button type="button" class="compartir-item" role="menuitem" @onclick="CopiarEnlace">
+                                    <i class="bi @(enlaceCopiado ? "bi-check2 text-success" : "bi-link-45deg")"></i>
+                                    <div class="text-start">
+                                        <div class="fw-semibold small text-dark">@(enlaceCopiado ? "¡Enlace copiado!" : "Copiar enlace")</div>
+                                        <div class="text-muted" style="font-size:.72rem;">Copiar URL directa</div>
+                                    </div>
+                                </button>
+                                <button type="button" class="compartir-item" role="menuitem" @onclick="CompartirEnOtrasApps">
+                                    <i class="bi bi-box-arrow-up-right text-primary"></i>
+                                    <div class="text-start">
+                                        <div class="fw-semibold small text-dark">Compartir en otras apps</div>
+                                        <div class="text-muted" style="font-size:.72rem;">Enviar a un contacto o app</div>
+                                    </div>
+                                </button>
+                            </div>
+                        }
+                    </div>
+
+                    <BotonCotizacionIcono ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
+                </div>
+            </div>
+        </div>
     }
+</div>
+
+@if (panelAbierto)
+{
+    <style>html, body { overflow: hidden !important; }</style>
+
+    <button type="button" class="nav-circulo izq" aria-label="Anterior" @onclick="() => CambiarMaterial(-1)">
+        <i class="bi bi-chevron-left"></i>
+    </button>
+    <button type="button" class="nav-circulo der" aria-label="Siguiente" @onclick="() => CambiarMaterial(1)">
+        <i class="bi bi-chevron-right"></i>
+    </button>
 }

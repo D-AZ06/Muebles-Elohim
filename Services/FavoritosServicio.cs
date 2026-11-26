@@ -137,6 +137,10 @@ namespace Muebles_Elohim.Services
 
             foreach (ItemFavorito item in _items.ToList())
             {
+                if (item.ProductoId.StartsWith("mat-"))
+                {
+                    continue;
+                }
                 if (!porId.TryGetValue(item.ProductoId, out CatalogoFoto? actual))
                 {
                     _items.Remove(item);
