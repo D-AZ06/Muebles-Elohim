@@ -8,6 +8,7 @@ function alturaHeader() {
 // Si el usuario hace scroll hacia arriba, el header se muestra normal.
 window.colapsarHeader = function () {
     window.__scrollLista = null;
+    window.__fondoY = null;
     window.scrollTo(0, alturaHeader());
 };
 
@@ -73,6 +74,63 @@ window.restaurarScrollLista = function () {
     }, 600);
 };
 
+// --- Fondo congelado mientras el detalle esta abierto (Materiales) ---
+// Blazor sube la pagina al inicio al navegar a ?id=; aqui se vigila cada frame y se devuelve
+// el fondo al punto donde estaba el usuario, asi nunca se ve la pagina arriba detras del modal.
+window.bloquearFondo = function () {
+    const y = window.scrollY;
+
+    window.__scrollLista = y;
+    window.__fondoY = y;
+    window.__fondoId = (window.__fondoId || 0) + 1;
+
+    if (window.__fondoLoop)
+        return;
+
+    const vigilar = () => {
+        const fijo = window.__fondoY;
+
+        // Si ya no hay bloqueo o se salio de Materiales, se deja de vigilar
+        if (fijo == null || !/\/materiales$/i.test(location.pathname)) {
+            window.__fondoY = null;
+            window.__fondoLoop = 0;
+            return;
+        }
+
+        if (Math.abs(window.scrollY - fijo) > 1) {
+            window.scrollTo({ top: fijo, left: 0, behavior: 'instant' });
+        }
+
+        window.__fondoLoop = requestAnimationFrame(vigilar);
+    };
+
+    window.__fondoLoop = requestAnimationFrame(vigilar);
+};
+
+// Se suelta un momento despues de cerrar, para cubrir el salto que hace Blazor al navegar
+window.soltarFondo = function () {
+    const id = window.__fondoId;
+
+    setTimeout(() => {
+        if (window.__fondoId === id) {
+            window.__fondoY = null;
+        }
+    }, 700);
+};
+
+window.irASeccion = function (e, id) {
+    const destino = document.getElementById(id);
+
+    if (!destino)
+        return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    window.__scrollLista = null;
+    destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 window.addEventListener('scroll', () => {
     // Si Blazor sube al inicio con el detalle abierto (o recien cerrado),
     // se corrige en el mismo instante, antes de que se alcance a ver
@@ -81,7 +139,7 @@ window.addEventListener('scroll', () => {
     if (guardado != null &&
         guardado > 1 &&
         window.scrollY <= 1 &&
-        location.pathname.toLowerCase().endsWith('/productos')) {
+        /\/(productos|materiales)$/i.test(location.pathname)) {
         window.scrollTo(0, guardado);
     }
 

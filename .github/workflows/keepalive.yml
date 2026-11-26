@@ -1,0 +1,12 @@
+# Consulta Supabase una vez al día para que el plan gratis no lo pause por inactividad.
+# Requiere los secrets SUPABASE_URL y SUPABASE_KEY (clave anon) en GitHub.
+name: keepalive
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  workflow_dispatch:
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS "${{ secrets.SUPABASE_URL }}/rest/v1/catalogo_fotos?select=id&limit=1" -H "apikey: ${{ secrets.SUPABASE_KEY }}"

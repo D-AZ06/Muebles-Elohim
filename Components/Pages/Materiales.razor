@@ -1,11 +1,13 @@
 @page "/materiales"
-@rendermode InteractiveServer
 @using Muebles_Elohim.Components.Shared
 
 <PageTitle>@(panelAbierto && seleccionado is not null ? seleccionado.Nombre + " - Materiales - Muebles Elohim" : "Materiales - Muebles Elohim")</PageTitle>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-<style>html { scroll-behavior: smooth; }</style>
+<style>
+    html {
+        scrollbar-gutter: stable;
+    }</style>
 
 @if (panelAbierto && seleccionado is not null)
 {
@@ -46,7 +48,7 @@
         <div class="indice-movil d-lg-none">
             @foreach (var g in grupos)
             {
-                <a class="chip-indice" href="#@g.Ancla"><i class="bi @g.Icono me-1"></i>@g.Titulo</a>
+                <a class="chip-indice" href="materiales#@g.Ancla" data-seccion="@g.Ancla" onclick="irASeccion(event, this.dataset.seccion)"><i class="bi @g.Icono me-1"></i>@g.Titulo</a>
             }
         </div>
 
@@ -56,7 +58,7 @@
                     <h6><i class="bi bi-list-ul me-2"></i>Índice</h6>
                     @foreach (var g in grupos)
                     {
-                        <a href="#@g.Ancla"><i class="bi @g.Icono"></i>@g.Titulo<span>@g.Items.Count</span></a>
+                        <a href="materiales#@g.Ancla" data-seccion="@g.Ancla" onclick="irASeccion(event, this.dataset.seccion)"><i class="bi @g.Icono"></i>@g.Titulo<span>@g.Items.Count</span></a>
                     }
                 </nav>
             </aside>
