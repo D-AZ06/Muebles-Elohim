@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /cotizacion
+Sitemap: https://muebles-elohim.pages.dev/sitemap.xml
