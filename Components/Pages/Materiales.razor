@@ -48,7 +48,7 @@
         <div class="indice-movil d-lg-none">
             @foreach (var g in grupos)
             {
-                <a class="chip-indice" href="materiales#@g.Ancla" data-seccion="@g.Ancla" onclick="irASeccion(event, this.dataset.seccion)"><i class="bi @g.Icono me-1"></i>@g.Titulo</a>
+                <a class="chip-indice" href="materiales#@g.Ancla" data-seccion="@g.Ancla"><i class="bi @g.Icono me-1"></i>@g.Titulo</a>
             }
         </div>
 
@@ -58,7 +58,7 @@
                     <h6><i class="bi bi-list-ul me-2"></i>Índice</h6>
                     @foreach (var g in grupos)
                     {
-                        <a href="materiales#@g.Ancla" data-seccion="@g.Ancla" onclick="irASeccion(event, this.dataset.seccion)"><i class="bi @g.Icono"></i>@g.Titulo<span>@g.Items.Count</span></a>
+                        <a href="materiales#@g.Ancla" data-seccion="@g.Ancla"><i class="bi @g.Icono"></i>@g.Titulo<span>@g.Items.Count</span></a>
                     }
                 </nav>
             </aside>
@@ -80,7 +80,7 @@
                                              title="Ver imagen completa"
                                              data-foto="@m.Foto"
                                              data-titulo="@m.Nombre"
-                                             onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                                             data-visor>
                                             <img src="@m.Foto" alt="@m.Nombre" loading="lazy" />
                                             <span class="muestra-tipo"><i class="bi @g.Icono"></i></span>
                                         </div>
@@ -125,7 +125,7 @@
 
                 <button type="button" class="det-ampliar" title="Ver imagen completa" aria-label="Ver imagen completa"
                         data-foto="@seleccionado.Foto" data-titulo="@seleccionado.Nombre"
-                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                        data-visor>
                     <i class="bi bi-arrows-fullscreen"></i>
                 </button>
             </div>
@@ -185,8 +185,6 @@
                             </div>
                         }
                     </div>
-
-                    <BotonCotizacionIcono ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
                 </div>
             </div>
         </div>

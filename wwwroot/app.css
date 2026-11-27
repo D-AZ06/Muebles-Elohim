@@ -1,3 +1,10 @@
+/* El footer siempre al final del documento, aunque la pagina tenga poco contenido */
+#app {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -558,3 +565,10 @@ body {
         animation: none;
     }
 }
+
+@media (hover: none) {
+    [data-visor] {
+        cursor: pointer !important;
+    }
+}
+

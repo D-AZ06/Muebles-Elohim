@@ -1,0 +1,131 @@
+﻿/* Pantalla de carga (se ve mientras Blazor descarga la app) */
+.cargando-app {
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6rem;
+    padding: 1.5rem;
+    text-align: center;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #fff;
+    color: #495057;
+}
+
+/* Mismo logo y tamaño que el encabezado, así la transición al cargar la app es continua */
+.cargando-logo {
+    display: block;
+    width: 260px;
+    max-width: 80%;
+    height: auto;
+}
+
+/* Círculo que gira (un div con borde: no depende de SVG ni de transform-origin) */
+.cargando-giro {
+    width: 3.2rem;
+    height: 3.2rem;
+    border: 5px solid #e9ecef;
+    border-top-color: #0d6efd;
+    border-radius: 50%;
+    animation: cargando-giro 0.9s linear infinite;
+}
+
+.cargando-texto {
+    margin: 0;
+    font-size: 1.05rem;
+    letter-spacing: .04em;
+}
+
+/* Los puntos van aparecen uno a uno y desaparecen juntos; no mueven el texto */
+.cargando-texto-in {
+    position: relative;
+    display: inline-block;
+}
+
+.cargando-puntos {
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+    white-space: nowrap;
+}
+
+    .cargando-puntos span {
+        opacity: 0;
+        animation-duration: 1.6s;
+        animation-iteration-count: infinite;
+    }
+
+        .cargando-puntos span:nth-child(1) {
+            animation-name: cargando-punto-1;
+        }
+
+        .cargando-puntos span:nth-child(2) {
+            animation-name: cargando-punto-2;
+        }
+
+        .cargando-puntos span:nth-child(3) {
+            animation-name: cargando-punto-3;
+        }
+
+@keyframes cargando-giro {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes cargando-punto-1 {
+    0%, 5% {
+        opacity: 0;
+    }
+
+    15%, 80% {
+        opacity: 1;
+    }
+
+    90%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes cargando-punto-2 {
+    0%, 30% {
+        opacity: 0;
+    }
+
+    40%, 80% {
+        opacity: 1;
+    }
+
+    90%, 100% {
+        opacity: 0;
+    }
+}
+
+@keyframes cargando-punto-3 {
+    0%, 55% {
+        opacity: 0;
+    }
+
+    65%, 80% {
+        opacity: 1;
+    }
+
+    90%, 100% {
+        opacity: 0;
+    }
+}
+
+/* Si el dispositivo pide menos movimiento: el círculo sigue girando (es la señal de que está cargando),
+   solo más lento, y los puntos quedan fijos */
+@media (prefers-reduced-motion: reduce) {
+    .cargando-giro {
+        animation-duration: 2.2s;
+    }
+
+    .cargando-puntos span {
+        animation: none;
+        opacity: 1;
+    }
+}

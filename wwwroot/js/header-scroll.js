@@ -91,7 +91,7 @@ window.bloquearFondo = function () {
         const fijo = window.__fondoY;
 
         // Si ya no hay bloqueo o se salio de Materiales, se deja de vigilar
-        if (fijo == null || !/\/materiales$/i.test(location.pathname)) {
+        if (fijo == null || !/\/(materiales|productos)$/i.test(location.pathname)) {
             window.__fondoY = null;
             window.__fondoLoop = 0;
             return;
@@ -130,6 +130,11 @@ window.irASeccion = function (e, id) {
     window.__scrollLista = null;
     destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
+
+document.addEventListener('click', e => {
+    const a = e.target.closest ? e.target.closest('a[data-seccion]') : null;
+    if (a) window.irASeccion(e, a.dataset.seccion);
+});
 
 window.addEventListener('scroll', () => {
     // Si Blazor sube al inicio con el detalle abierto (o recien cerrado),

@@ -174,6 +174,17 @@ namespace Muebles_Elohim.Components.Pages
             }
         }
 
+        // Solo el mouse abre/cierra por hover; en pantallas táctiles el menú lo maneja el clic
+        private void AbrirMenuCompartir(PointerEventArgs e)
+        {
+            if (e.PointerType == "mouse") menuCompartirAbierto = true;
+        }
+
+        private void CerrarMenuCompartir(PointerEventArgs e)
+        {
+            if (e.PointerType == "mouse") menuCompartirAbierto = false;
+        }
+
         private void CambiarMaterial(int paso)
         {
             int i = ordenados.FindIndex(m => m.Id == seleccionado?.Id);

@@ -97,10 +97,11 @@ namespace Muebles_Elohim.Services
                     quitados++;
                     hayCambios = true;
                 }
-                else if (item.Nombre != actual.Titulo || item.Imagen != actual.Foto)
+                else if (item.Nombre != actual.Titulo || item.Imagen != actual.Foto || item.Categoria != actual.Categoria)
                 {
                     item.Nombre = actual.Titulo;
                     item.Imagen = actual.Foto;
+                    item.Categoria = actual.Categoria;
                     hayCambios = true;
                 }
             }
@@ -184,7 +185,7 @@ namespace Muebles_Elohim.Services
         }
 
         // Devuelve false si la lista ya está llena y no se pudo agregar
-        public async Task<bool> AgregarAsync(string productoId, string nombre, string imagen)
+        public async Task<bool> AgregarAsync(string productoId, string nombre, string imagen, string categoria = "")
         {
             ItemCotizacion? existente;
             existente = null;
@@ -215,6 +216,7 @@ namespace Muebles_Elohim.Services
                 nuevo.ProductoId = productoId;
                 nuevo.Nombre = nombre;
                 nuevo.Imagen = imagen;
+                nuevo.Categoria = categoria;
                 nuevo.Cantidad = 1;
                 _items.Add(nuevo);
             }

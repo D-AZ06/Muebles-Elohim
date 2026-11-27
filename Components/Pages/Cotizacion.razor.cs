@@ -88,7 +88,7 @@ namespace Muebles_Elohim.Components.Pages
         {
             if (ultimoQuitado is null) return;
 
-            await Lista.AgregarAsync(ultimoQuitado.ProductoId, ultimoQuitado.Nombre, ultimoQuitado.Imagen);
+            await Lista.AgregarAsync(ultimoQuitado.ProductoId, ultimoQuitado.Nombre, ultimoQuitado.Imagen, ultimoQuitado.Categoria);
             await Lista.CambiarCantidadAsync(ultimoQuitado.ProductoId, ultimoQuitado.Cantidad);
             ultimoQuitado = null;
         }

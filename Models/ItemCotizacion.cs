@@ -7,5 +7,6 @@
         public string Nombre { get; set; } = string.Empty;
         public string Imagen { get; set; } = string.Empty;
         public int Cantidad { get; set; } = 1;
+        public string Categoria { get; set; } = string.Empty;
     }
 }
