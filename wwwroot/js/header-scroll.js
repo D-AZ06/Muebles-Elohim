@@ -166,3 +166,26 @@ window.addEventListener('scroll', () => {
         document.body.classList.remove('scrolled');
     }
 });
+
+// WASM: tras la pantalla de carga, mantiene el header colapsado hasta que el usuario interactue
+(function () {
+    let interactuo = false;
+
+    ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(ev =>
+        window.addEventListener(ev, () => { interactuo = true; }, { once: true, passive: true }));
+
+    const fin = Date.now() + 6000;
+
+    const t = setInterval(() => {
+        if (interactuo || Date.now() > fin) {
+            clearInterval(t);
+            return;
+        }
+
+        const h = document.getElementById('mainHeader');
+
+        if (h && h.offsetHeight && window.scrollY < alturaHeader() - 1) {
+            window.colapsarHeader();
+        }
+    }, 80);
+})();

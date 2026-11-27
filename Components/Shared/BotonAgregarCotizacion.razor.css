@@ -1,4 +1,34 @@
-﻿.btn-cotizar {
+﻿.btn-cot-icono {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .92);
+    color: #6c757d;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+    cursor: pointer;
+    transition: transform .2s ease, color .2s ease;
+}
+
+    .btn-cot-icono:hover {
+        transform: scale(1.1);
+        color: #f57c00;
+    }
+
+    .btn-cot-icono.activo {
+        color: #f57c00;
+    }
+
+    .btn-cot-icono.llena {
+        color: #dc3545;
+    }
+
+.btn-cotizar {
     display: block;
     width: 100%;
     margin: 0;
@@ -23,4 +53,35 @@
     .btn-cotizar.agregado {
         background: #fff;
         color: #f57c00;
+    }
+
+/* Versión circular (Materiales) */
+.btn-cot-icono {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .92);
+    color: #6c757d;
+    font-size: 1.15rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .25);
+    cursor: pointer;
+    transition: transform .2s ease, color .2s ease;
+}
+
+    .btn-cot-icono:hover {
+        transform: scale(1.1);
+        color: #f57c00;
+    }
+
+    .btn-cot-icono.activo {
+        color: #f57c00;
+    }
+
+    .btn-cot-icono.llena {
+        color: #dc3545;
     }

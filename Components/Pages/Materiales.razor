@@ -93,7 +93,8 @@
                                                     @onclick="() => AbrirDetalle(m)">
                                                 <i class="bi bi-eye"></i>
                                             </button>
-                                            <BotonFavorito ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" />
+                                            <BotonFavorito ProductoId="@IdDe(m)" Categoria="@TituloTipo(m.Tipo)" Nombre="@m.Nombre" Imagen="@m.Foto" />
+                                            <BotonAgregarCotizacion Icono="true" ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" Categoria="@TituloTipo(m.Tipo)" />
                                         </div>
                                     </article>
                                 </div>
@@ -119,7 +120,7 @@
                 <img src="@seleccionado.Foto" alt="@seleccionado.Nombre" />
 
                 <div class="det-corazon">
-                    <BotonFavorito ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
+                    <BotonFavorito ProductoId="@IdDe(seleccionado)" Categoria="@TituloTipo(seleccionado.Tipo)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
                 </div>
 
                 <button type="button" class="det-ampliar" title="Ver imagen completa" aria-label="Ver imagen completa"
@@ -150,6 +151,7 @@
 
                 <div class="det-acciones">
                     <div class="compartir-wrapper" @onpointerenter="AbrirMenuCompartir" @onpointerleave="CerrarMenuCompartir">
+                        <BotonAgregarCotizacion Icono="true" ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" Categoria="@TituloTipo(seleccionado.Tipo)" />
                         <button type="button" class="ic-ojo" aria-label="Compartir material" title="Compartir"
                                 aria-expanded="@menuCompartirAbierto"
                                 @onclick="() => menuCompartirAbierto = !menuCompartirAbierto">

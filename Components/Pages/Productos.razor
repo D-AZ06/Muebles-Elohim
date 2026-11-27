@@ -148,6 +148,7 @@
 
                                     <div class="favorito-esquina">
                                         <BotonFavorito ProductoId="@producto.Id.ToString()"
+                                                    Categoria="@producto.Categoria"
                                                     Nombre="@producto.Titulo"
                                                     Imagen="@producto.Foto" />
                                     </div>
@@ -228,6 +229,7 @@
 
                 <div class="favorito-modal">
                     <BotonFavorito ProductoId="@productoSeleccionado.Id.ToString()"
+                                Categoria="@productoSeleccionado.Categoria"
                                 Nombre="@productoSeleccionado.Titulo"
                                 Imagen="@productoSeleccionado.Foto" />
                 </div>

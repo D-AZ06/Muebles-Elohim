@@ -1,8 +1,19 @@
 ﻿@implements IDisposable
 @inject Services.ListaCotizacionServicio Lista
 
-@* Botón para poner en cada tarjeta de producto *@
-@if (Lista.Contiene(ProductoId))
+@* Botón para las tarjetas. Con Icono="true" sale como círculo (se usa en Materiales) *@
+@if (Icono)
+{
+    <button type="button"
+            class="btn-cot-icono @(Lista.Contiene(ProductoId) ? "activo" : "") @(listaLlena ? "llena" : "")"
+            aria-label="@Etiqueta"
+            aria-pressed="@(Lista.Contiene(ProductoId) ? "true" : "false")"
+            title="@Etiqueta"
+            @onclick="Alternar">
+        <i class="bi @(Lista.Contiene(ProductoId) ? "bi-clipboard-check-fill" : "bi-clipboard-plus")"></i>
+    </button>
+}
+else if (Lista.Contiene(ProductoId))
 {
     <a class="btn-cotizar agregado" href="/cotizacion">En tu lista (@Lista.CantidadDe(ProductoId)) · Ver</a>
 }
@@ -32,6 +43,17 @@ else
     [Parameter]
     public string Categoria { get; set; } = string.Empty;
 
+    // true = botón circular con ícono, en vez del botón de texto
+    [Parameter]
+    public bool Icono { get; set; }
+
+    private bool listaLlena;
+
+    private string Etiqueta =>
+        listaLlena
+            ? "Tu lista está llena (máximo " + Services.ListaCotizacionServicio.MaxProductos + " productos)"
+            : Lista.Contiene(ProductoId) ? "Quitar de la cotización" : "Agregar a la cotización";
+
     protected override void OnInitialized()
     {
         Lista.OnChange += Refrescar;
@@ -42,12 +64,23 @@ else
         InvokeAsync(StateHasChanged);
     }
 
-    private bool listaLlena;
-
     private async Task Agregar()
     {
         bool agregado = await Lista.AgregarAsync(ProductoId, Nombre, Imagen, Categoria);
         listaLlena = !agregado;
+    }
+
+    // Versión de ícono: agrega y, si ya estaba, lo quita
+    private async Task Alternar()
+    {
+        if (Lista.Contiene(ProductoId))
+        {
+            listaLlena = false;
+            await Lista.QuitarAsync(ProductoId);
+            return;
+        }
+
+        await Agregar();
     }
 
     public void Dispose()

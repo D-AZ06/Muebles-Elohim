@@ -33,21 +33,33 @@
     {
         <h1>Mi lista de cotización</h1>
 
-        <ul class="items">
+        <ul class="lista">
             @foreach (ItemCotizacion item in Lista.Items)
             {
-                <li class="item reveal">
-                    @if (!string.IsNullOrEmpty(item.Imagen))
-                    {
-                        <img src="@item.Imagen" alt="@item.Nombre" />
-                    }
-                    <span class="nombre">@item.Nombre</span>
-                    <div class="cantidad">
-                        <button type="button" aria-label="Menos" @onclick="() => CambiarCantidad(item, item.Cantidad - 1)">−</button>
-                        <span>@item.Cantidad</span>
-                        <button type="button" aria-label="Más" @onclick="() => CambiarCantidad(item, item.Cantidad + 1)">+</button>
+                <li class="fila reveal" @key="item.ProductoId">
+                    <a class="fila-foto" href="@EnlaceDe(item)" tabindex="-1" aria-hidden="true">
+                        @if (!string.IsNullOrEmpty(item.Imagen))
+                        {
+                            <img src="@item.Imagen" alt="" loading="lazy" />
+                        }
+                    </a>
+
+                    <div class="fila-texto">
+                        <span class="fila-tipo">@TipoDe(item)</span>
+                        <a class="fila-nombre" href="@EnlaceDe(item)">@item.Nombre</a>
                     </div>
-                    <button type="button" class="quitar" @onclick="() => Quitar(item)">Quitar</button>
+
+                    <div class="fila-acciones">
+                        <div class="cantidad">
+                            <button type="button" aria-label="Menos" @onclick="() => CambiarCantidad(item, item.Cantidad - 1)">−</button>
+                            <span>@item.Cantidad</span>
+                            <button type="button" aria-label="Más" @onclick="() => CambiarCantidad(item, item.Cantidad + 1)">+</button>
+                        </div>
+
+                        <button type="button" class="quitar" aria-label="Quitar @item.Nombre" @onclick="() => Quitar(item)">
+                            <i class="bi bi-trash3"></i> Quitar
+                        </button>
+                    </div>
                 </li>
             }
         </ul>
@@ -84,7 +96,7 @@
         {
             string url = ObtenerUrlWhatsApp();
 
-            @if (url.Length > 2000)
+            @if (url.Length > 4000)
             {
                 <div class="aviso error">
                     <p>Tu lista es muy larga para enviarla en un solo mensaje. Quita algunos productos o envíala en dos cotizaciones.</p>
