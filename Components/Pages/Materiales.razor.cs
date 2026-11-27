@@ -38,6 +38,8 @@ namespace Muebles_Elohim.Components.Pages
         private bool menuCompartirAbierto;
         private bool enlaceCopiado;
         private bool enfocar;
+        private bool panelEstabaAbierto;
+
         private ElementReference modalRef;
 
         protected override async Task OnInitializedAsync()
@@ -68,13 +70,25 @@ namespace Muebles_Elohim.Components.Pages
                 enfocar = false;
                 await modalRef.FocusAsync();
             }
+
+            // Al cerrar el detalle se vuelve al mismo punto de la lista
+            if (panelEstabaAbierto && !panelAbierto)
+            {
+                panelEstabaAbierto = false;
+                await JS.InvokeVoidAsync("restaurarScrollLista");
+                await JS.InvokeVoidAsync("soltarFondo");
+            }
+            else if (panelAbierto)
+            {
+                panelEstabaAbierto = true;
+            }
         }
 
         // Texturas primero, luego maderas, colores y cualquier otro tipo
         private void Armar()
         {
             grupos = materiales
-                .GroupBy(m => string.IsNullOrWhiteSpace(m.Tipo) ? "otros" : m.Tipo.Trim().ToLowerInvariant())
+                .GroupBy(m => ClaveTipo(m.Tipo))
                 .OrderBy(g => { int i = Array.IndexOf(OrdenTipos, g.Key); return i < 0 ? 99 : i; })
                 .ThenBy(g => g.Key)
                 .Select(g => new Grupo("sec-" + g.Key.Replace(' ', '-'), TituloTipo(g.Key), IconoTipo(g.Key), g.OrderBy(m => m.Id).ToList()))
@@ -82,6 +96,21 @@ namespace Muebles_Elohim.Components.Pages
 
             ordenados = grupos.SelectMany(g => g.Items).ToList();
         }
+
+        private static string ClaveTipo(string? tipo)
+        {
+            string t = (tipo ?? "").Trim().ToLowerInvariant();
+
+            return t switch
+            {
+                "" or "otros" => "otros",
+                "textura" or "texturas" => "textura",
+                "madera" or "maderas" => "madera",
+                "color" or "colores" => "color",
+                _ => t
+            };
+        }
+
 
         private static string TituloTipo(string? tipo)
         {
@@ -126,8 +155,11 @@ namespace Muebles_Elohim.Components.Pages
             enfocar = true;
         }
 
-        private void AbrirDetalle(Material m)
+        private async Task AbrirDetalle(Material m)
         {
+            // Se guarda en qué punto de la lista estaba el usuario
+            await JS.InvokeVoidAsync("bloquearFondo");
+
             Navegacion.NavigateTo("materiales?id=" + m.Id);
         }
 
