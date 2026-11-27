@@ -1,55 +1,14 @@
 .favoritos {
-    max-width: 760px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 1.5rem 1rem;
 }
 
-.items {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 1.5rem;
-}
-
-.item {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    padding: .75rem 0;
-    border-bottom: 1px solid #eee;
-}
-
-    .item img {
-        width: 64px;
-        height: 64px;
-        object-fit: cover;
-        border-radius: 6px;
+    .favoritos h1 {
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        font-weight: 700;
     }
-
-.nombre {
-    flex: 1;
-    font-weight: 600;
-    color: #212529;
-    text-decoration: none;
-}
-
-    .nombre:hover {
-        text-decoration: underline;
-    }
-
-.acciones {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: .35rem;
-}
-
-.quitar {
-    border: none;
-    background: none;
-    color: #dc3545;
-    font-size: .85rem;
-    cursor: pointer;
-}
 
 .ayuda {
     padding: .6rem .8rem;
@@ -58,6 +17,120 @@
     font-size: .9rem;
 }
 
+/* ===== SECCIONES ===== */
+.seccion {
+    margin-bottom: 2.5rem;
+}
+
+.seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: .5rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid #e6dfd1;
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+    .seccion-titulo i {
+        color: #8a6d3b;
+    }
+
+.cuenta {
+    margin-left: auto;
+    min-width: 1.6rem;
+    padding: 0 .5rem;
+    border-radius: 50px;
+    background: #f3e7cc;
+    color: #8a6d3b;
+    font-size: .8rem;
+    font-weight: 600;
+    line-height: 1.6rem;
+    text-align: center;
+}
+
+/* ===== LISTA ===== */
+.lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem .25rem;
+    border-bottom: 1px solid #eee;
+}
+
+.fila-foto {
+    display: block;
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border-radius: .75rem;
+    background: #f1f1f1;
+}
+
+    .fila-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.fila-texto {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.fila-tipo {
+    font-size: .75rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: #8a6d3b;
+}
+
+.fila-nombre {
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    color: #212529;
+    text-decoration: none;
+}
+
+    .fila-nombre:hover {
+        color: #0d6efd;
+    }
+
+.fila-acciones {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quitar {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .2rem;
+    border: none;
+    background: none;
+    color: #dc3545;
+    font-size: .85rem;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+    .quitar:hover {
+        text-decoration: underline;
+    }
+
 .btn-ir {
     display: inline-block;
     padding: .6rem 1.2rem;
@@ -65,4 +138,25 @@
     background: #212529;
     color: #fff;
     text-decoration: none;
+}
+
+/* Celular: las opciones pasan debajo, a todo el ancho */
+@media (max-width: 575.98px) {
+    .fila {
+        grid-template-columns: 64px 1fr;
+        gap: .6rem .85rem;
+    }
+
+    .fila-foto {
+        width: 64px;
+        height: 64px;
+    }
+
+    .fila-acciones {
+        grid-column: 1 / -1;
+    }
+
+        .fila-acciones ::deep .btn-cotizar {
+            flex: 1;
+        }
 }

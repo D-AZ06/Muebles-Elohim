@@ -5,5 +5,6 @@ namespace Muebles_Elohim.Models
         public string ProductoId { get; set; } = string.Empty;
         public string Nombre { get; set; } = string.Empty;
         public string Imagen { get; set; } = string.Empty;
+        public string Categoria { get; set; } = string.Empty;
     }
 }

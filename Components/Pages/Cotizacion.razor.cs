@@ -126,5 +126,15 @@ namespace Muebles_Elohim.Components.Pages
         {
             Lista.OnChange -= Refrescar;
         }
+
+        private static string EnlaceDe(ItemCotizacion item) =>
+    item.ProductoId.StartsWith("mat-")
+        ? "/materiales?id=" + item.ProductoId.Substring(4)
+        : "/productos?id=" + item.ProductoId;
+
+        private static string TipoDe(ItemCotizacion item) =>
+            !string.IsNullOrWhiteSpace(item.Categoria)
+                ? item.Categoria
+                : (item.ProductoId.StartsWith("mat-") ? "Material" : "Producto");
     }
 }

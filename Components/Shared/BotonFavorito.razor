@@ -20,6 +20,9 @@
     [Parameter]
     public string Imagen { get; set; } = string.Empty;
 
+    [Parameter]
+    public string Categoria { get; set; } = string.Empty;
+
     private bool EsFavorito => Favoritos.Contiene(ProductoId);
 
     protected override void OnInitialized()

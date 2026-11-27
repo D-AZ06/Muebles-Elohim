@@ -93,7 +93,7 @@ namespace Muebles_Elohim.Services
         }
 
         // Agrega si no está, quita si ya está
-        public async Task AlternarAsync(string productoId, string nombre, string imagen)
+        public async Task AlternarAsync(string productoId, string nombre, string imagen, string categoria = "")
         {
             ItemFavorito? existente = _items.FirstOrDefault(i => i.ProductoId == productoId);
 
@@ -107,7 +107,8 @@ namespace Muebles_Elohim.Services
                 {
                     ProductoId = productoId,
                     Nombre = nombre,
-                    Imagen = imagen
+                    Imagen = imagen,
+                    Categoria = categoria
                 });
             }
 
@@ -147,10 +148,11 @@ namespace Muebles_Elohim.Services
                     quitados++;
                     hayCambios = true;
                 }
-                else if (item.Nombre != actual.Titulo || item.Imagen != actual.Foto)
+                else if (item.Nombre != actual.Titulo || item.Imagen != actual.Foto || item.Categoria != actual.Categoria)
                 {
                     item.Nombre = actual.Titulo;
                     item.Imagen = actual.Foto;
+                    item.Categoria = actual.Categoria;
                     hayCambios = true;
                 }
             }

@@ -9,16 +9,15 @@
 <PageTitle>Mis favoritos | Muebles Elohim</PageTitle>
 
 <section class="favoritos">
-    
 
     @if (quitadosPorCatalogo > 0)
     {
         <p class="ayuda">
             @(quitadosPorCatalogo == 1
-                ? "Un producto de tus favoritos ya no está disponible y se quitó."
-                : $"{quitadosPorCatalogo} productos de tus favoritos ya no están disponibles y se quitaron.")
-        </p>
-    }
+                    ? "Un producto de tus favoritos ya no está disponible y se quitó."
+                    : $"{quitadosPorCatalogo} productos de tus favoritos ya no están disponibles y se quitaron.")
+    </p>
+        }
 
     @if (Servicio.Items.Count == 0)
     {
@@ -30,31 +29,80 @@
     {
         <h1>Mis favoritos</h1>
 
-        <ul class="items">
-            @foreach (ItemFavorito item in Servicio.Items)
-            {
-                <li class="item reveal" @key="item.ProductoId">
-                    @if (!string.IsNullOrEmpty(item.Imagen))
+        @foreach (var s in Secciones())
+        {
+            <section class="seccion">
+                <h2 class="seccion-titulo">
+                    <i class="bi @s.Icono"></i>@s.Titulo<span class="cuenta">@s.Lista.Count</span>
+                </h2>
+
+                <ul class="lista">
+                    @foreach (ItemFavorito item in s.Lista)
                     {
-                        <img src="@item.Imagen" alt="@item.Nombre" />
+                        <li class="fila reveal" @key="item.ProductoId">
+                            <a class="fila-foto" href="@EnlaceDe(item)" tabindex="-1" aria-hidden="true">
+                                @if (!string.IsNullOrEmpty(item.Imagen))
+                                {
+                                    <img src="@item.Imagen" alt="" loading="lazy" />
+                                }
+                            </a>
+
+                            <div class="fila-texto">
+                                <span class="fila-tipo">@TipoDe(item)</span>
+                                <a class="fila-nombre" href="@EnlaceDe(item)">@item.Nombre</a>
+                            </div>
+
+                            <div class="fila-acciones">
+                                <BotonAgregarCotizacion ProductoId="@item.ProductoId"
+                                                        Nombre="@item.Nombre"
+                                                        Imagen="@item.Imagen"
+                                                        Categoria="@item.Categoria" />
+
+                                <button type="button" class="quitar" title="Quitar de favoritos"
+                                        aria-label="Quitar @item.Nombre de favoritos"
+                                        @onclick="() => Servicio.QuitarAsync(item.ProductoId)">
+                                    <i class="bi bi-trash3"></i> Quitar
+                                </button>
+                            </div>
+                        </li>
                     }
-                    <a class="nombre" href="@(item.ProductoId.StartsWith("mat-") ? "/materiales?id=" + item.ProductoId.Substring(4) : "/productos?id=" + item.ProductoId)">@item.Nombre</a>
-                    <div class="acciones">
-                        <BotonAgregarCotizacion ProductoId="@item.ProductoId"
-                                                Nombre="@item.Nombre"
-                                                Imagen="@item.Imagen" />
-                        <button type="button" class="quitar" @onclick="() => Servicio.QuitarAsync(item.ProductoId)">
-                            Quitar
-                        </button>
-                    </div>
-                </li>
-            }
-        </ul>
+                </ul>
+            </section>
+        }
     }
 </section>
 
 @code {
     private int quitadosPorCatalogo;
+
+    private static bool EsMaterial(ItemFavorito item) => item.ProductoId.StartsWith("mat-");
+
+    // Solo se muestran las secciones que tienen favoritos
+    private IEnumerable<(string Titulo, string Icono, List<ItemFavorito> Lista)> Secciones()
+    {
+        List<ItemFavorito> productos = Servicio.Items.Where(i => !EsMaterial(i)).ToList();
+        List<ItemFavorito> materiales = Servicio.Items.Where(EsMaterial).ToList();
+
+        if (productos.Count > 0)
+        {
+            yield return ("Productos", "bi-grid", productos);
+        }
+
+        if (materiales.Count > 0)
+        {
+            yield return ("Materiales", "bi-palette", materiales);
+        }
+    }
+
+    private static string TipoDe(ItemFavorito item) =>
+    !string.IsNullOrWhiteSpace(item.Categoria)
+        ? item.Categoria
+        : (EsMaterial(item) ? "Material" : "Producto");
+
+    private static string EnlaceDe(ItemFavorito item) =>
+        EsMaterial(item)
+            ? "/materiales?id=" + item.ProductoId.Substring(4)
+            : "/productos?id=" + item.ProductoId;
 
     protected override void OnInitialized()
     {
