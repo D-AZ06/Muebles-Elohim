@@ -12,7 +12,7 @@ namespace Muebles_Elohim.Services
         private readonly NavigationManager _navegacion;
 
         // Si el enlace pasa de este largo, algunos navegadores lo cortan
-        private const int LargoMaximoUrl = 2000;
+        private const int LargoMaximoUrl = 4000;
 
         public CotizacionServicio(IOptions<ContactoOpciones> contacto, NavigationManager navegacion)
         {
@@ -52,27 +52,39 @@ namespace Muebles_Elohim.Services
         private string ArmarUrl(string numero, SolicitudCotizacion solicitud, IReadOnlyList<ItemCotizacion> items, bool conEnlaces)
         {
             StringBuilder texto = new StringBuilder();
-            texto.AppendLine("Cotización " + solicitud.Codigo);
             texto.AppendLine("Hola, soy " + solicitud.Nombre.Trim() + " (" + solicitud.Telefono.Trim() + ").");
             texto.AppendLine("Quiero cotizar:");
+            texto.AppendLine();
+
+            int numeroItem = 1;
 
             foreach (ItemCotizacion item in items)
             {
-                string referencia;
+                // Tipo de mueble + modelo (si el nombre ya empieza con el tipo, no se repite)
+                string producto = item.Nombre;
+
+                if (!string.IsNullOrWhiteSpace(item.Categoria) &&
+                    !item.Nombre.StartsWith(item.Categoria, StringComparison.OrdinalIgnoreCase))
+                {
+                    producto = item.Categoria + " - " + item.Nombre;
+                }
+
+                texto.AppendLine(numeroItem + ". " + producto + " (x" + item.Cantidad + ")");
 
                 if (conEnlaces)
                 {
-                    referencia = EnlaceProducto(item.ProductoId);
+                    texto.AppendLine(EnlaceProducto(item.ProductoId));
                 }
                 else
                 {
-                    referencia = "ref. " + item.ProductoId;
+                    texto.AppendLine("ref. " + item.ProductoId);
                 }
 
-                texto.AppendLine("- " + item.Nombre + " x" + item.Cantidad + " | " + referencia);
+                texto.AppendLine();
+                numeroItem++;
             }
 
-            return "https://wa.me/" + numero + "?text=" + Uri.EscapeDataString(texto.ToString());
+            return "https://wa.me/" + numero + "?text=" + Uri.EscapeDataString(texto.ToString().TrimEnd());
         }
 
         private string EnlaceProducto(string id)

@@ -172,7 +172,8 @@
 
                                             <BotonAgregarCotizacion ProductoId="@producto.Id.ToString()"
                                                                     Nombre="@producto.Titulo"
-                                                                    Imagen="@producto.Foto" />
+                                                                    Imagen="@producto.Foto"
+                                                                    Categoria="@producto.Categoria" />
                                         </div>
                                     </div>
                                 </div>
@@ -267,8 +268,8 @@
                 <div class="mt-auto pt-3 border-top detalle-acciones" @onclick:stopPropagation="true">
 
                   <div class="compartir-wrapper"
-                         @onpointerenter="AbrirMenuCompartir"
-                         @onpointerleave="CerrarMenuCompartir">
+                       @onpointerenter="AbrirMenuCompartir"
+                        @onpointerleave="CerrarMenuCompartir">
                       <button type="button"
                               class="btn btn-outline-secondary rounded-3 btn-accion-icono @(menuCompartirAbierto ? "active" : "")"
                               aria-label="Compartir producto"
@@ -322,9 +323,10 @@
                   </div>
 
                   <div class="detalle-acciones-cotizar">
-                      <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
-                                              Nombre="@productoSeleccionado.Titulo"
-                                              Imagen="@productoSeleccionado.Foto" />
+                        <BotonAgregarCotizacion ProductoId="@productoSeleccionado.Id.ToString()"
+                                                Nombre="@productoSeleccionado.Titulo"
+                                                Imagen="@productoSeleccionado.Foto"
+                                                Categoria="@productoSeleccionado.Categoria" />
                   </div>
 
                   @if (enlaceCopiado)

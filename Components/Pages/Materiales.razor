@@ -94,7 +94,6 @@
                                                 <i class="bi bi-eye"></i>
                                             </button>
                                             <BotonFavorito ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" />
-                                            <BotonCotizacionIcono ProductoId="@IdDe(m)" Nombre="@m.Nombre" Imagen="@m.Foto" />
                                         </div>
                                     </article>
                                 </div>
@@ -150,7 +149,7 @@
                 </div>
 
                 <div class="det-acciones">
-                    <div class="compartir-wrapper" @onpointerenter="AbrirMenuCompartir" @onpointerleave="CerrarMenuCompartir" ">
+                    <div class="compartir-wrapper" @onpointerenter="AbrirMenuCompartir" @onpointerleave="CerrarMenuCompartir">
                         <button type="button" class="ic-ojo" aria-label="Compartir material" title="Compartir"
                                 aria-expanded="@menuCompartirAbierto"
                                 @onclick="() => menuCompartirAbierto = !menuCompartirAbierto">
@@ -184,8 +183,6 @@
                             </div>
                         }
                     </div>
-
-                    <BotonCotizacionIcono ProductoId="@IdDe(seleccionado)" Nombre="@seleccionado.Nombre" Imagen="@seleccionado.Foto" />
                 </div>
             </div>
         </div>

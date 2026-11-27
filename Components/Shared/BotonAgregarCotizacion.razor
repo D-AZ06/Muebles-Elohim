@@ -29,6 +29,9 @@ else
     [Parameter]
     public string Imagen { get; set; } = string.Empty;
 
+    [Parameter]
+    public string Categoria { get; set; } = string.Empty;
+
     protected override void OnInitialized()
     {
         Lista.OnChange += Refrescar;
@@ -43,7 +46,7 @@ else
 
     private async Task Agregar()
     {
-        bool agregado = await Lista.AgregarAsync(ProductoId, Nombre, Imagen);
+        bool agregado = await Lista.AgregarAsync(ProductoId, Nombre, Imagen, Categoria);
         listaLlena = !agregado;
     }
 
