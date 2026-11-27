@@ -131,6 +131,11 @@ window.irASeccion = function (e, id) {
     destino.scrollIntoView({ behavior: 'smooth', block: 'start' });
 };
 
+document.addEventListener('click', e => {
+    const a = e.target.closest ? e.target.closest('a[data-seccion]') : null;
+    if (a) window.irASeccion(e, a.dataset.seccion);
+});
+
 window.addEventListener('scroll', () => {
     // Si Blazor sube al inicio con el detalle abierto (o recien cerrado),
     // se corrige en el mismo instante, antes de que se alcance a ver

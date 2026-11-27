@@ -139,5 +139,25 @@
         visor.querySelector('.visor-cerrar').focus();
     }
 
+    // Delegado: funciona con lo que Blazor dibuja después y sin onclick en línea (la CSP los bloquea)
+    function disparador(e) {
+        return e.target.closest ? e.target.closest('[data-visor]') : null;
+    }
+
+    document.addEventListener('click', function (e) {
+        const el = disparador(e);
+        if (!el) return;
+        e.preventDefault();
+        abrir(el.dataset.foto, el.dataset.titulo);
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const el = disparador(e);
+        if (!el || el.tagName === 'BUTTON') return;
+        e.preventDefault();
+        abrir(el.dataset.foto, el.dataset.titulo);
+    });
+
     window.visorImagen = { abrir: abrir };
 })();

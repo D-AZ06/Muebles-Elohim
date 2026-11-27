@@ -133,7 +133,7 @@
                                         title="Ver imagen completa"
                                         data-foto="@producto.Foto"
                                         data-titulo="@producto.Titulo"
-                                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                                        data-visor>
                                         <img src="@producto.Foto" alt="@producto.Titulo" loading="lazy" />
 
                                         <span class="tarjeta-categoria">
@@ -237,7 +237,7 @@
                         title="Ver imagen completa"
                         data-foto="@productoSeleccionado.Foto"
                         data-titulo="@productoSeleccionado.Titulo"
-                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                        data-visor>
                     <i class="bi bi-arrows-fullscreen"></i>
                 </button>
             </div>
