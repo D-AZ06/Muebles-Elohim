@@ -558,3 +558,9 @@ body {
         animation: none;
     }
 }
+
+@media (hover: none) {
+    [data-visor] {
+        cursor: pointer !important;
+    }
+}

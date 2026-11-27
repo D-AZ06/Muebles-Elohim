@@ -91,7 +91,7 @@ window.bloquearFondo = function () {
         const fijo = window.__fondoY;
 
         // Si ya no hay bloqueo o se salio de Materiales, se deja de vigilar
-        if (fijo == null || !/\/materiales$/i.test(location.pathname)) {
+        if (fijo == null || !/\/(materiales|productos)$/i.test(location.pathname)) {
             window.__fondoY = null;
             window.__fondoLoop = 0;
             return;

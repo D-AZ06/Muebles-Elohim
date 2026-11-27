@@ -80,7 +80,7 @@
                                              title="Ver imagen completa"
                                              data-foto="@m.Foto"
                                              data-titulo="@m.Nombre"
-                                             onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                                             data-visor>
                                             <img src="@m.Foto" alt="@m.Nombre" loading="lazy" />
                                             <span class="muestra-tipo"><i class="bi @g.Icono"></i></span>
                                         </div>
@@ -125,7 +125,7 @@
 
                 <button type="button" class="det-ampliar" title="Ver imagen completa" aria-label="Ver imagen completa"
                         data-foto="@seleccionado.Foto" data-titulo="@seleccionado.Nombre"
-                        onclick="visorImagen.abrir(this.dataset.foto, this.dataset.titulo)">
+                        data-visor>
                     <i class="bi bi-arrows-fullscreen"></i>
                 </button>
             </div>
@@ -150,7 +150,7 @@
                 </div>
 
                 <div class="det-acciones">
-                    <div class="compartir-wrapper" @onmouseenter="() => menuCompartirAbierto = true" @onmouseleave="() => menuCompartirAbierto = false">
+                    <div class="compartir-wrapper" @onpointerenter="AbrirMenuCompartir" @onpointerleave="CerrarMenuCompartir" ">
                         <button type="button" class="ic-ojo" aria-label="Compartir material" title="Compartir"
                                 aria-expanded="@menuCompartirAbierto"
                                 @onclick="() => menuCompartirAbierto = !menuCompartirAbierto">

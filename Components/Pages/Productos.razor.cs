@@ -140,6 +140,7 @@ namespace Muebles_Elohim.Components.Pages
             {
                 panelEstabaAbierto = false;
                 await JS.InvokeVoidAsync("restaurarScrollLista");
+                await JS.InvokeVoidAsync("soltarFondo");
             }
             else if (panelAbierto)
             {
@@ -221,8 +222,8 @@ namespace Muebles_Elohim.Components.Pages
 
         private async Task AbrirDetalle(CatalogoFoto producto)
         {
-            // Se guarda en qué punto de la lista estaba el usuario
-            await JS.InvokeVoidAsync("guardarScrollLista");
+            // Se congela el fondo en el punto donde estaba el usuario
+            await JS.InvokeVoidAsync("bloquearFondo");
 
             productoSeleccionado = producto;
             panelAbierto = true;
@@ -321,14 +322,15 @@ namespace Muebles_Elohim.Components.Pages
             menuCompartirAbierto = !menuCompartirAbierto;
         }
 
-        private void AbrirMenuCompartir()
+        // Solo el mouse abre/cierra por hover; en pantallas táctiles el menú lo maneja el clic
+        private void AbrirMenuCompartir(PointerEventArgs e)
         {
-            menuCompartirAbierto = true;
+            if (e.PointerType == "mouse") menuCompartirAbierto = true;
         }
 
-        private void CerrarMenuCompartir()
+        private void CerrarMenuCompartir(PointerEventArgs e)
         {
-            menuCompartirAbierto = false;
+            if (e.PointerType == "mouse") menuCompartirAbierto = false;
         }
 
         private string ObtenerEnlaceProducto()
